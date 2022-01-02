@@ -1,6 +1,6 @@
 function img_corners = corner_detection(img_rgb,debug)
     
-    % corner_detection performs pre-processing of the input image img_rgb and
+    % CORNER_DETECTION performs pre-processing of the input image img_rgb and
     % detect the corners of the image by Harris corner detection
     %
     % output
@@ -58,9 +58,11 @@ maxima=ordfilt2(CIM,sum(support(:)),support);
 
 
 % draw a cross on the image in the local maxima
-figure("Name", 'Local maxima of Harris measure'), imshow(img_rgb,[], "Border", 'tight'), hold on,
-plot(loc_y,loc_x,'g+', 'LineWidth', 0.5)
-saveas(gcf, "images/image_corners.png");
+if debug
+    figure("Name", 'Local maxima of Harris measure'), imshow(img_rgb,[], "Border", 'tight'), hold on,
+    plot(loc_y,loc_x,'g+', 'LineWidth', 0.5)
+    saveas(gcf, "images/image_corners.png");
+end
 
 img_corners = [loc_x,loc_y];
     

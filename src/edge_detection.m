@@ -1,13 +1,13 @@
 function img_edges = edge_detection(img_rgb, debug)
     
-    % edge_detection performs pre-processing of the input image img_rgb and
+    % EDGE_DETECTION performs pre-processing of the input image img_rgb and
     % detect the edges of the image by Canny edge detection
     %
     % output
     % img_edges: binary image containing 1s where the function employed 
     % finds edges in the grayscale or binary image I and 0s elsewhere
     %
-    % input parameters
+    % input
     % img_rgb: input image over which we compute the edges
     % debug: true to display the images
     

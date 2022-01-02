@@ -1,6 +1,6 @@
 function img_lines = line_extraction(img, img_edges, debug)
     
-    % line_extraction finds the straight lines of the image applying Hough
+    % LINE_EXTRACTION finds the straight lines of the image applying Hough
     % transform
     %
     % output
@@ -32,16 +32,8 @@ function img_lines = line_extraction(img, img_edges, debug)
     
     if debug
         figure("Name", "Extracted lines"), imshow(img, "Border", 'tight'), hold on
-        for k = 1:length(img_lines)
-            xy = [img_lines(k).point1; img_lines(k).point2];
-            plot(xy(:,1),xy(:,2),'LineWidth',0.5,'Color','red');
-
-            % Plot beginnings and ends of lines
-            % plot(xy(1,1),xy(1,2),'x','LineWidth',0.05,'Color','red');
-            % plot(xy(2,1),xy(2,2),'x','LineWidth',0.05,'Color','red');
-            text(xy(1,1),xy(1,2), num2str(k), 'Color', 'green', 'FontSize',8)
-        end
-       saveas(gcf, "images/image_lines.png");
+        plot_lines(img_lines);
+        saveas(gcf, "images/image_lines.png");
     end
     
     
