@@ -38,8 +38,4 @@ function img_lines = line_extraction(img, img_edges, debug)
     
     
 
-
-
-
-
 end

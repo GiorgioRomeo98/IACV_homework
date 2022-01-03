@@ -27,9 +27,10 @@ function img_edges = edge_detection(img_rgb, debug)
     % stronger than "threshold". "sigma" is the standard deviation of the
     % Gaussian filter
     
-    [BW,th] = edge(img_grey,'canny');
     % we use the threshold identified by the default canny algorithm as a
     % starting point to tune the "threshold" and "sigma" parameters
+    [BW,th] = edge(img_grey,'canny');
+
     if debug
         figure("Name", "Edges detected through Canny method (default setting)");
         imshow(BW)
@@ -57,15 +58,13 @@ function img_edges = edge_detection(img_rgb, debug)
 %         imshow(BW)
 %     end
 
-% sos = sqrt(2);
+% sigma = sqrt(2);
 %     for i= 1:50
-%         sos = sos + 0.02;
-%         BW = edge(img_grey,'canny', th.*0.55, sos);
+%         sigma = sigma + 0.02;
+%         BW = edge(img_grey,'canny', th.*0.55, sigma);
 %         figure;
 %         imshow(BW)
 %     end
-
-
 
 
 
