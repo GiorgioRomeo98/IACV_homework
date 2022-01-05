@@ -1,22 +1,84 @@
-function  img_vertical_rectification = vertical_reconstruction(img, K, debug)
+function  img_vertical_rectification = vertical_reconstruction(img, K, points, debug)
     % VERTICAL_RECONSTRUCTION performs the rectification of a vertical facade
     %
     % output
     % img_vertical_rectification: image obtained from the image in input
     % after performing rectification of the vertical facade
     %
-    %input
-    %
-    img_vertical_rectification = 0;
+    % input
+    % img: original image over which we apply the rectification of a
+    % vertical facade
+    % K: calibration matrix
+    % points: main points obtained from the original image
+    % debug: true to display the images and results
 
 
-    %% comput the image of the absolute conic through the calibration matrix K
+    %% compute the image of the absolute conic through the calibration matrix K
     imIAC = inv(K * K');
-    imIAC = imIAC ./ norm(imIAC);
+    imIAC = imIAC / norm(imIAC);
 
-    display(imIAC);
-    sos = inv(K * K.');
-    display(sos);
+
+    %% image of the line at the infinite belonging to a plane orthogonal to the horizontal one
+    vertical_im_line_infty = cross(points.vertical_vp_1, points.vertical_vp_2);
+
+    % normalize the image of the line at the infinity
+    vertical_im_line_infty = vertical_im_line_infty / vertical_im_line_infty(3);
+
+
+    %% assign the coefficients to write the equations
+    a1 = imIAC(1,1);
+    b1 = imIAC(1,2)*2;
+    c1 = imIAC(1,3)*2;
+    d1 = imIAC(2,2);
+    e1 = imIAC(2,3)*2;
+    f1 = imIAC(3,3);
+    a2 = vertical_im_line_infty(1);
+    b2 = vertical_im_line_infty(2);
+    c2 = vertical_im_line_infty(3);
+
+
+    %% build the system and find the intersection between image of the absolute conic and the line at the infinity
+    syms 'x';
+    syms 'y';
+    
+    % image of absolute conic
+    eq1 = a1*x^2 + b1*x*y + d1*y^2 + c1*x + e1*y + f1;
+    
+    % image of line at infinity
+    eq2 = a2*x + b2*y + c2;
+    
+    eqns = [eq1 == 0, eq2 == 0];
+    S = solve(eqns, [x,y]);
+    
+    s1 = [double(S.x(1)); double(S.y(1)); 1];
+    s2 = [double(S.x(2)); double(S.y(2)); 1];
+
+
+    %% compute the rectification matrix
+    II = s1;
+    JJ = s2;
+    imDCCP = II*JJ.' + JJ*II.';
+    imDCCP = imDCCP./norm(imDCCP);
+    
+    [U,D,~] = svd(imDCCP);  % ~ = U.'
+    D(3,3) = 1;
+    H_rect = inv(U*sqrt(D));
+
+
+    %% apply the rectification
+    tform = projective2d(H_rect');
+    img_vertical_rectification = imwarp(img,tform);
+    img_vertical_rectification = imrotate(img_vertical_rectification, 180);
+
+
+    %% plot the result
+    if debug
+        figure('Name', 'Rectification of the facade 3 (vertical facade)');
+        imshow(img_vertical_rectification, 'Border', 'tight');
+        saveas(img_vertical_rectification, 'image_rectification_vertical_facade')
+    end
+    
+
 
 
 end

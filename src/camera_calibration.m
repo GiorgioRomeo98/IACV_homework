@@ -1,8 +1,9 @@
-function K = camera_calibration(img, points, H, debug)
+function [K, points] = camera_calibration(img, points, H, debug)
     % CAMERA_CALIBRATION returns the calibration matrix K
     %
     % output
     % K: calibration matrix
+    % points: updated struct of main points obtained from the original image
     % 
     % input:
     % img: original image
@@ -19,46 +20,68 @@ function K = camera_calibration(img, points, H, debug)
     points.lower_left_corner = [204;1268;1];
 
 
-    %% vertical vanishing point
+    %% vertical vanishing points
     % compute vertical lines
     left_vertical_line = cross(points.lower_left_corner, points.upper_left_corner);
     right_vertical_line = cross(points.lower_right_corner, points.upper_right_corner);
+    upper_horizontal_line = cross(points.upper_left_corner,  points.upper_right_corner);
+    lower_horizontal_line = cross(points.lower_left_corner,  points.lower_right_corner);
 
     %compute vertical vanishing point
-    vertical_vp = cross(left_vertical_line, right_vertical_line);
+    vertical_vp_1 = cross(left_vertical_line, right_vertical_line);
+    vertical_vp_2 = cross(upper_horizontal_line, lower_horizontal_line);
 
     %normalize vanishing point
-    vertical_vp = vertical_vp/vertical_vp(3);
+    vertical_vp_1 = vertical_vp_1/vertical_vp_1(3);
+    vertical_vp_2 = vertical_vp_2/vertical_vp_2(3);
 
     % assign the vertical vanishing point to the struct
-    points.vertical_vp = vertical_vp;
+    points.vertical_vp_1 = vertical_vp_1;
+    points.vertical_vp_2 = vertical_vp_2;
 
 
-    %% plot the main points and lines
+    %% plot the main points and lines to show horizontal vanishing points
     if debug
         FNT_SZ = 20;
-        figure("Name","Original image"), imshow(img, "Border", 'tight'), hold on;
+        figure("Name","Original image - horizontal vanishing points"), imshow(img, "Border", 'tight'), hold on;
         text(points.upper_left_point(1), points.upper_left_point(2), 'a', 'FontSize', FNT_SZ, 'Color', 'b')
         text(points.upper_right_point(1), points.upper_right_point(2), 'b', 'FontSize', FNT_SZ, 'Color', 'b')
-        %text(points.lower_right_point(1), points.lower_right_point(2), 'c', 'FontSize', FNT_SZ, 'Color', 'b')
-        %text(points.lower_left_point(1), points.lower_left_point(2), 'd', 'FontSize', FNT_SZ, 'Color', 'b')
-        text(points.upper_left_corner(1), points.upper_left_corner(2), 'e', 'FontSize', FNT_SZ, 'Color', 'g')
-        text(points.upper_right_corner(1), points.upper_right_corner(2), 'f', 'FontSize', FNT_SZ, 'Color', 'g')
-        text(points.lower_right_corner(1), points.lower_right_corner(2), 'g', 'FontSize', FNT_SZ, 'Color', 'g')
-        text(points.lower_left_corner(1), points.lower_left_corner(2), 'h', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(points.lower_right_point(1), points.lower_right_point(2), 'c', 'FontSize', FNT_SZ, 'Color', 'b')
+        text(points.lower_left_point(1), points.lower_left_point(2), 'd', 'FontSize', FNT_SZ, 'Color', 'b')
         
         plot([points.upper_left_point(1), points.horizontal_vp_1(1)], [points.upper_left_point(2), points.horizontal_vp_1(2)], 'b');
         plot([points.lower_left_point(1), points.horizontal_vp_1(1)], [points.lower_left_point(2), points.horizontal_vp_1(2)], 'b');
         plot([points.upper_left_point(1), points.horizontal_vp_2(1)], [points.upper_left_point(2), points.horizontal_vp_2(2)], 'b');
         plot([points.upper_right_point(1), points.horizontal_vp_2(1)], [points.upper_right_point(2), points.horizontal_vp_2(2)], 'b');
-        plot([points.lower_left_corner(1), points.vertical_vp(1)], [points.lower_left_corner(2), points.vertical_vp(2)], 'g');
-        plot([points.lower_right_corner(1), points.vertical_vp(1)], [points.lower_right_corner(2), points.vertical_vp(2)], 'g');
-       
+        
         text(points.horizontal_vp_1(1), points.horizontal_vp_1(2), 'vp1', 'FontSize', FNT_SZ, 'Color', 'r')
         text(points.horizontal_vp_2(1), points.horizontal_vp_2(2), 'vp2', 'FontSize', FNT_SZ, 'Color', 'r')
-        text(points.vertical_vp(1), points.vertical_vp(2), 'vp3', 'FontSize', FNT_SZ, 'Color', 'r')
         
         plot([points.horizontal_vp_1(1), points.horizontal_vp_2(1)], [points.horizontal_vp_1(2), points.horizontal_vp_2(2)], 'r--')
+
+
+
+    end
+
+
+    %% plot the main points and lines to show vertical vanishing points
+    if debug
+        figure("Name","Original image - vertical vanishing points"), imshow(img, "Border", 'tight'), hold on;
+
+        text(points.upper_left_corner(1), points.upper_left_corner(2), 'e', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(points.upper_right_corner(1), points.upper_right_corner(2), 'f', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(points.lower_right_corner(1), points.lower_right_corner(2), 'g', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(points.lower_left_corner(1), points.lower_left_corner(2), 'h', 'FontSize', FNT_SZ, 'Color', 'g')
+
+        plot([points.lower_left_corner(1), points.vertical_vp_1(1)], [points.lower_left_corner(2), points.vertical_vp_1(2)], 'g');
+        plot([points.lower_right_corner(1), points.vertical_vp_1(1)], [points.lower_right_corner(2), points.vertical_vp_1(2)], 'g');
+        plot([points.upper_left_corner(1), points.vertical_vp_2(1)], [points.upper_left_corner(2), points.vertical_vp_2(2)], 'g');
+        plot([points.lower_left_corner(1), points.vertical_vp_2(1)], [points.lower_left_corner(2), points.vertical_vp_2(2)], 'g');
+
+        text(points.vertical_vp_1(1), points.vertical_vp_1(2), 'vp3', 'FontSize', FNT_SZ, 'Color', 'r')
+        text(points.vertical_vp_2(1), points.vertical_vp_2(2), 'vp4', 'FontSize', FNT_SZ, 'Color', 'r')
+
+        plot([points.vertical_vp_1(1), points.vertical_vp_2(1)], [points.vertical_vp_1(2), points.vertical_vp_2(2)], 'r--')
 
     end
 
@@ -72,7 +95,7 @@ function K = camera_calibration(img, points, H, debug)
 
     %% compute image of the absolute conic
     H = inv(H);
-    IAC = get_image_absolute_conic(im_line_infty, points.vertical_vp, points.horizontal_vp_1, points.horizontal_vp_2, H);
+    IAC = get_image_absolute_conic(im_line_infty, points.vertical_vp_1, points.horizontal_vp_1, points.horizontal_vp_2, H);
 
 
     %% get the intrinsic parameter before the denormalization
