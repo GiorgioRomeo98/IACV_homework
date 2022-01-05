@@ -8,7 +8,7 @@ addpath(genpath([pwd, filesep, 'utils']));
 addpath(genpath([pwd, filesep, 'images']));
 
 
-%% set global variables
+%% set variables
 debug = true;
 FNT_SZ = 20;
 
@@ -32,7 +32,12 @@ img_corners = corner_detection(img, debug);
 %% G1. 2D reconstruction of a horizontal section
 % stratified appraoch: image scene --> affine reconstruction --> shape reconstruction
 
-img_affine_reconstruction = affine_reconstruction(img, debug);
+[img_affine, points_affine] = affine_reconstruction(img, debug);
+
+[img_shape, points_shape] = shape_reconstruction(img_affine, points_affine, debug);
+
+
+%% G2. Calibration
 
 
 
