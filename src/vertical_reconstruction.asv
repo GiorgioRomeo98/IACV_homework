@@ -5,9 +5,12 @@ function  img_vertical_rectification = vertical_reconstruction(img, K, points, d
     % img_vertical_rectification: image obtained from the image in input
     % after performing rectification of the vertical facade
     %
-    %input
-    %
-    img_vertical_rectification = 0;
+    % input
+    % img: original image over which we apply the rectification of a
+    % vertical facade
+    % K: calibration matrix
+    % points: main points obtained from the original image
+    % debug: true to display the images and results
 
 
     %% compute the image of the absolute conic through the calibration matrix K
@@ -51,22 +54,74 @@ function  img_vertical_rectification = vertical_reconstruction(img, K, points, d
     s2 = [double(S.x(2)); double(S.y(2)); 1];
 
 
-    %% sos
+    %% compute the rectification matrix
     II = s1;
     JJ = s2;
     imDCCP = II*JJ.' + JJ*II.';
     imDCCP = imDCCP./norm(imDCCP);
     
-    [U,D,V] = svd(imDCCP);
+    [U,D,~] = svd(imDCCP);  % ~ = U.'
     D(3,3) = 1;
-    Hfinal = inv(U*sqrt(D));
-    
-    tform = projective2d(Hfinal.');
+    H_rect = inv(U*sqrt(D));
+
+
+    %% apply the rectification to the image
+    tform = projective2d(H_rect');
     img_vertical_rectification = imwarp(img,tform);
     img_vertical_rectification = imrotate(img_vertical_rectification, 180);
-    img_vertical_rectification = J;
-    figure;
-    imshow(img_vertical_rectification);
+
+
+    %% apply the rectification to the main points
+    [upper_left_corner_rect(1),upper_left_corner_rect(2)]  = transformPointsForward(tform,points.upper_left_corner(1),points.upper_left_corner(2));
+    [upper_right_corner_rect(1),upper_right_corner_rect(2)] = transformPointsForward(tform,points.upper_right_corner(1),points.upper_right_corner(2));
+    [lower_right_corner_rect(1),lower_right_corner_rect(2)] = transformPointsForward(tform,points.lower_right_corner(1),points.lower_right_corner(2));
+    [lower_left_corner_rect(1),lower_left_corner_rect(2)] = transformPointsForward(tform,points.lower_left_corner(1),points.lower_left_corner(2));
+    
+
+    %% shift main points to better plot them
+    shift(1) = 680 - lower_right_corner_rect(1);
+    shift(2) = 127 - lower_right_corner_rect(2);
+    upper_left_corner_rect(1) = upper_left_corner_rect(1)+shift(1);
+    upper_left_corner_rect(2) = upper_left_corner_rect(2)+shift(2);
+    upper_right_corner_rect(1) = upper_right_corner_rect(1)+shift(1);
+    upper_right_corner_rect(2) = upper_right_corner_rect(2)+shift(2);
+    lower_right_corner_rect(1) = lower_right_corner_rect(1)+shift(1);
+    lower_right_corner_rect(2) = lower_right_corner_rect(2)+shift(2);
+    lower_left_corner_rect(1) = lower_left_corner_rect(1)+shift(1);
+    lower_left_corner_rect(2) = lower_left_corner_rect(2)+shift(2);
+
+
+    %% change main points assignment in order to match the original configuration
+    % the image rotation create a mismatch since the points do not rotate
+    % as the rectified image does
+    temp = upper_left_corner_rect;
+    upper_left_corner_rect = lower_right_corner_rect;
+    lower_right_corner_rect = temp;
+    temp = upper_right_corner_rect;
+    upper_right_corner_rect = lower_left_corner_rect;
+    lower_left_corner_rect = temp;
+
+    %% plot the result
+%     if debug
+        FNT_SZ = 20;
+        figure('Name', 'Rectification of the facade 3 (vertical facade)');
+        view(180,90);
+        imshow(img_vertical_rectification, 'Border', 'tight'); hold on;
+
+        text(upper_left_corner_rect(1), upper_left_corner_rect(2), 'e', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(upper_right_corner_rect(1), upper_right_corner_rect(2), 'f', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(lower_right_corner_rect(1), lower_right_corner_rect(2), 'g', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(lower_left_corner_rect(1), lower_left_corner_rect(2), 'h', 'FontSize', FNT_SZ, 'Color', 'g')
+    
+        plot([upper_left_corner_rect(1), upper_right_corner_rect(1)], [upper_left_corner_rect(2), upper_right_corner_rect(2)], 'g');
+        plot([upper_right_corner_rect(1), lower_right_corner_rect(1)], [upper_right_corner_rect(2), lower_right_corner_rect(2)], 'g');
+        plot([lower_right_corner_rect(1), lower_left_corner_rect(1)], [lower_right_corner_rect(2), lower_left_corner_rect(2)], 'g');
+        plot([lower_left_corner_rect(1), upper_left_corner_rect(1)], [lower_left_corner_rect(2), upper_left_corner_rect(2)], 'g');
+
+        saveas(gcf, 'images/image_rectification_vertical_facade.png');
+%     end
+    
+
 
 
 end

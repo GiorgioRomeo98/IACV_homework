@@ -1,4 +1,4 @@
-function [img_shape_reconstruction, H_shape, points_shape] = shape_reconstruction(img_affine,points_affine, debug)
+function [img_shape_reconstruction, H_shape, points_shape, ratio_f2_f3] = shape_reconstruction(img_affine,points_affine, debug)
     %SHAPE_RECONSTRUCTION computes the shape reconstruction of the affine 
     % image scene given in input
     %
@@ -9,6 +9,7 @@ function [img_shape_reconstruction, H_shape, points_shape] = shape_reconstructio
     % affine image (affine rectification of the original image)
     % points_shape: main points obtained from applying the shape
     % reconstruction to the affine main points
+    % ratio_f2_f3: ration between length of facade 2 and length facade 3
     % 
     % input
     % img_affine: affine image scene over which we apply the affine reconstrution
@@ -108,13 +109,13 @@ function [img_shape_reconstruction, H_shape, points_shape] = shape_reconstructio
     facade_3_length = norm(lower_right_point_shape-lower_left_point_shape, 2);
     shadow_segment_length = norm(upper_shadow_point_shape-lower_left_point_shape, 2);
     
-    ratio_fs = facade_3_length/shadow_segment_length;   % ratio facade shadow
+    ratio_fs = facade_3_length/shadow_segment_length;   % ratio facade and shadow
 
 
     %% compute the ratio between facade 2 and facade 3 (invariant ratio of length)
     facade_2_length = norm(upper_left_point_shape-lower_left_point_shape, 2);
     
-    ratio_ff = facade_2_length/facade_3_length;  % ratio facade 3 and facade 2
+    ratio_f2_f3 = facade_2_length/facade_3_length;  % ratio facade 2 and facade 3
 
 
     %% show the result
@@ -138,7 +139,7 @@ function [img_shape_reconstruction, H_shape, points_shape] = shape_reconstructio
         saveas(gcf, "images/image_shape_reconstruction.png");
 
         fprintf('The ratio between facade 3 and the shadow segment dg after shape reconstruction is: %f/%f = %f\n', facade_3_length, shadow_segment_length, ratio_fs);
-        fprintf('The ratio between facade 2 and facade 3 after shape reconstruction is: %f/%f = %f\n', facade_2_length, facade_3_length, ratio_ff);
+        fprintf('The ratio between facade 2 and facade 3 after shape reconstruction is: %f/%f = %f\n', facade_2_length, facade_3_length, ratio_f2_f3);
 
     end
 

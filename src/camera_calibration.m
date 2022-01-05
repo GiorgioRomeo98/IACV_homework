@@ -14,10 +14,10 @@ function [K, points] = camera_calibration(img, points, H, debug)
 
 
     %% assign other main points useful for camera calibration
-    points.upper_left_corner = [271;535;1];
-    points.upper_right_corner = [732;552;1];
-    points.lower_right_corner = [799;1254;1];
-    points.lower_left_corner = [204;1268;1];
+    points.upper_left_corner = [276;490;1];
+    points.upper_right_corner = [728;507;1];
+    points.lower_right_corner = [803;1296;1];
+    points.lower_left_corner = [203;1310;1];
 
 
     %% vertical vanishing points
@@ -66,6 +66,7 @@ function [K, points] = camera_calibration(img, points, H, debug)
 
     %% plot the main points and lines to show vertical vanishing points
     if debug
+        FNT_SZ = 20;
         figure("Name","Original image - vertical vanishing points"), imshow(img, "Border", 'tight'), hold on;
 
         text(points.upper_left_corner(1), points.upper_left_corner(2), 'e', 'FontSize', FNT_SZ, 'Color', 'g')

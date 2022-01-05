@@ -10,7 +10,6 @@ addpath(genpath([pwd, filesep, 'images']));
 
 %% set variables
 debug = false;
-FNT_SZ = 20;
 
 
 %% load the image
@@ -34,7 +33,7 @@ img_corners = corner_detection(img, debug);
 
 [img_affine, H_affine, points, points_affine] = affine_reconstruction(img, debug);
 
-[img_shape, H_shape, points_shape] = shape_reconstruction(img_affine, points_affine, debug);
+[img_shape, H_shape, points_shape, ratio_f2_f3] = shape_reconstruction(img_affine, points_affine, debug);
 
 % compute the composite transformation:
 % image scene --> affine reconstruction --> shape reconstruction
@@ -51,6 +50,11 @@ H_r = H_shape * H_affine;
 %% G3. Reconstruction of a vertical facade
 
 img_vertical_facade_reconstruction = vertical_reconstruction(img, K, points, debug);
+
+
+%% G4. Localization
+
+
 
 
 

@@ -1,4 +1,4 @@
-function  img_vertical_rectification = vertical_reconstruction(img, K, points, debug)
+function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_reconstruction(img, K, points, debug)
     % VERTICAL_RECONSTRUCTION performs the rectification of a vertical facade
     %
     % output
@@ -65,19 +65,73 @@ function  img_vertical_rectification = vertical_reconstruction(img, K, points, d
     H_rect = inv(U*sqrt(D));
 
 
-    %% apply the rectification
+    %% apply the rectification to the image
     tform = projective2d(H_rect');
     img_vertical_rectification = imwarp(img,tform);
     img_vertical_rectification = imrotate(img_vertical_rectification, 180);
 
 
+    %% apply the rectification to the main points
+    [upper_left_corner_rect(1),upper_left_corner_rect(2)]  = transformPointsForward(tform,points.upper_left_corner(1),points.upper_left_corner(2));
+    [upper_right_corner_rect(1),upper_right_corner_rect(2)] = transformPointsForward(tform,points.upper_right_corner(1),points.upper_right_corner(2));
+    [lower_right_corner_rect(1),lower_right_corner_rect(2)] = transformPointsForward(tform,points.lower_right_corner(1),points.lower_right_corner(2));
+    [lower_left_corner_rect(1),lower_left_corner_rect(2)] = transformPointsForward(tform,points.lower_left_corner(1),points.lower_left_corner(2));
+    
+
+    %% change main points assignment in order to match the original configuration
+    % the image rotation create a mismatch since the points do not rotate
+    % as the rectified image does
+    temp = upper_left_corner_rect;
+    upper_left_corner_rect = lower_right_corner_rect;
+    lower_right_corner_rect = temp;
+    temp = upper_right_corner_rect;
+    upper_right_corner_rect = lower_left_corner_rect;
+    lower_left_corner_rect = temp;
+
+
+    %% shift main points to better plot them
+    shift(1) = 541 - lower_right_corner_rect(1);
+    shift(2) = 1766 - lower_right_corner_rect(2);
+    upper_left_corner_rect(1) = upper_left_corner_rect(1)+shift(1);
+    upper_left_corner_rect(2) = upper_left_corner_rect(2)+shift(2);
+    upper_right_corner_rect(1) = upper_right_corner_rect(1)+shift(1);
+    upper_right_corner_rect(2) = upper_right_corner_rect(2)+shift(2);
+    lower_right_corner_rect(1) = lower_right_corner_rect(1)+shift(1);
+    lower_right_corner_rect(2) = lower_right_corner_rect(2)+shift(2);
+    lower_left_corner_rect(1) = lower_left_corner_rect(1)+shift(1);
+    lower_left_corner_rect(2) = lower_left_corner_rect(2)+shift(2);
+
+
+    %% compute the ratio between facade 3 height and facade 3 length
+    facade_3_length = norm(lower_right_corner_rect-lower_left_corner_rect, 2);
+    facade_3_height = norm(upper_right_corner_rect-lower_right_corner_rect, 2);
+
+    ratio_f3_height_f3_length = facade_3_height / facade_3_length;     
+
+
     %% plot the result
     if debug
+        FNT_SZ = 20;
         figure('Name', 'Rectification of the facade 3 (vertical facade)');
-        imshow(img_vertical_rectification, 'Border', 'tight');
-        saveas(img_vertical_rectification, 'image_rectification_vertical_facade')
-    end
+        view(180,90);
+        imshow(img_vertical_rectification, 'Border', 'tight'); hold on;
+
+        text(upper_left_corner_rect(1), upper_left_corner_rect(2), 'e', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(upper_right_corner_rect(1), upper_right_corner_rect(2), 'f', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(lower_right_corner_rect(1), lower_right_corner_rect(2), 'g', 'FontSize', FNT_SZ, 'Color', 'g')
+        text(lower_left_corner_rect(1), lower_left_corner_rect(2), 'h', 'FontSize', FNT_SZ, 'Color', 'g')
     
+        plot([upper_left_corner_rect(1), upper_right_corner_rect(1)], [upper_left_corner_rect(2), upper_right_corner_rect(2)], 'g');
+        plot([upper_right_corner_rect(1), lower_right_corner_rect(1)], [upper_right_corner_rect(2), lower_right_corner_rect(2)], 'g');
+        plot([lower_right_corner_rect(1), lower_left_corner_rect(1)], [lower_right_corner_rect(2), lower_left_corner_rect(2)], 'g');
+        plot([lower_left_corner_rect(1), upper_left_corner_rect(1)], [lower_left_corner_rect(2), upper_left_corner_rect(2)], 'g');
+
+        saveas(gcf, 'images/image_rectification_vertical_facade.png');
+
+        fprintf('The ratio between facade 3 height and facade 3 length after rectification vertical facade is: %f/%f = %f\n', facade_3_height, facade_3_length, ratio_f3_height_f3_length);
+
+    end
+ 
 
 
 
