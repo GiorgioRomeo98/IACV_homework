@@ -43,23 +43,15 @@ H_r = H_shape * H_affine;
 
 
 %% G2. Calibration
-
 [K, points] = camera_calibration(img, points, H_r, debug);
 
 
 %% G3. Reconstruction of a vertical facade
-
-img_vertical_facade_reconstruction = vertical_reconstruction(img, K, points, debug);
+[img_vertical_facade_reconstruction, ratio_f3_height_f3_length] = vertical_reconstruction(img, K, points, debug);
 
 
 %% G4. Localization
-
-
-
-
-
-
-
+camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, debug)
 
 
 
