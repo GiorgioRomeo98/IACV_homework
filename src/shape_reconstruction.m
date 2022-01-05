@@ -1,10 +1,12 @@
-function [img_shape_reconstruction, points_shape] = shape_reconstruction(img_affine,points_affine, debug)
+function [img_shape_reconstruction, H_shape, points_shape] = shape_reconstruction(img_affine,points_affine, debug)
     %SHAPE_RECONSTRUCTION computes the shape reconstruction of the affine 
     % image scene given in input
     %
     % output
     % img_shape_reconstruction: image obtained from applying the shape
     % reconstruction to the input image
+    % H_shape: rectification matrix for shape reconstruction from
+    % affine image (affine rectification of the original image)
     % points_shape: main points obtained from applying the shape
     % reconstruction to the affine main points
     % 

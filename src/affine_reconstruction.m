@@ -1,10 +1,14 @@
-function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,debug)
+function [img_affine_reconstruction, H_affine, points, points_affine] = affine_reconstruction(img,debug)
     % AFFINE_RECONSTRUCTION computes the affine mapping of the image scene
     % given in input
     %
     % output
     % img_affine_reconstruction: image obtained from applying the affine
     % reconstruction to the input image
+    % H_affine: rectification matrix for affine reconstruction from
+    % original image
+    % points: main points obtained from the original image and needed to
+    % perform affine rectification
     % points_affine: main points obtained from applying the affine
     % reconstruction to the original main points (istantiated at the
     % beginning of the function)
@@ -43,29 +47,29 @@ function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,
     shadow_line = cross(lower_shadow_point, middle_shadow_point);
 
 
-    %% compute intersection between the shaodow vertical line and the lower_horizontal_line
+    %% compute intersection between the shadow vertical line and the lower_horizontal_line
     upper_shadow_point = cross(shadow_line, lower_horizontal_line);
 
     % normalize
     upper_shadow_point = upper_shadow_point/upper_shadow_point(3);
 
     
-    %% compute vanishing points
+    %% horizontal vanishing points
     % compute vanishing points
-    vanishing_point_A = cross(upper_horizontal_line, lower_horizontal_line);
-    vanishing_point_B = cross(left_oblique_line, right_oblique_line);
+    vanishing_point_1 = cross(upper_horizontal_line, lower_horizontal_line);
+    vanishing_point_2 = cross(left_oblique_line, right_oblique_line);
     
     % normalize vanishing points
-    vanishing_point_A = vanishing_point_A / vanishing_point_A(3);
-    vanishing_point_B = vanishing_point_B / vanishing_point_B(3);
+    vanishing_point_1 = vanishing_point_1 / vanishing_point_1(3);
+    vanishing_point_2 = vanishing_point_2 / vanishing_point_2(3);
     
 
-    %% compute image of the line at the infinity
+    %% image of the line at the infinity
     % compute the image of the line at the infinity
-    im_line_inf = cross(vanishing_point_A, vanishing_point_B);
+    im_line_infty = cross(vanishing_point_1, vanishing_point_2);
     
     % normalize the image of the line at the infinity
-    im_line_inf = im_line_inf / im_line_inf(3);
+    im_line_infty = im_line_infty / im_line_infty(3);
     
 
     %% plot main points, parallel lines, vanishing points, line at the infinite
@@ -80,16 +84,16 @@ function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,
         text(lower_shadow_point(1), middle_shadow_point(2), 'f', 'FontSize', FNT_SZ, 'Color', 'g')
         text(upper_shadow_point(1), upper_shadow_point(2), 'g', 'FontSize', FNT_SZ, 'Color', 'g')
         
-        plot([upper_left_point(1), vanishing_point_A(1)], [upper_left_point(2), vanishing_point_A(2)], 'b');
-        plot([lower_left_point(1), vanishing_point_A(1)], [lower_left_point(2), vanishing_point_A(2)], 'b');
-        plot([upper_left_point(1), vanishing_point_B(1)], [upper_left_point(2), vanishing_point_B(2)], 'b');
-        plot([upper_right_point(1), vanishing_point_B(1)], [upper_right_point(2), vanishing_point_B(2)], 'b');
+        plot([upper_left_point(1), vanishing_point_1(1)], [upper_left_point(2), vanishing_point_1(2)], 'b');
+        plot([lower_left_point(1), vanishing_point_1(1)], [lower_left_point(2), vanishing_point_1(2)], 'b');
+        plot([upper_left_point(1), vanishing_point_2(1)], [upper_left_point(2), vanishing_point_2(2)], 'b');
+        plot([upper_right_point(1), vanishing_point_2(1)], [upper_right_point(2), vanishing_point_2(2)], 'b');
         plot([lower_shadow_point(1), upper_shadow_point(1)], [lower_shadow_point(2), upper_shadow_point(2)], 'g');
        
-        text(vanishing_point_A(1), vanishing_point_A(2), 'v1', 'FontSize', FNT_SZ, 'Color', 'r')
-        text(vanishing_point_B(1), vanishing_point_B(2), 'v2', 'FontSize', FNT_SZ, 'Color', 'r')
+        text(vanishing_point_1(1), vanishing_point_1(2), 'vp1', 'FontSize', FNT_SZ, 'Color', 'r')
+        text(vanishing_point_2(1), vanishing_point_2(2), 'vp2', 'FontSize', FNT_SZ, 'Color', 'r')
         
-        plot([vanishing_point_A(1), vanishing_point_B(1)], [vanishing_point_A(2), vanishing_point_B(2)], 'r--')
+        plot([vanishing_point_1(1), vanishing_point_2(1)], [vanishing_point_1(2), vanishing_point_2(2)], 'r--')
 
         saveas(gcf, "images/image_original_lines.png");
 
@@ -97,12 +101,12 @@ function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,
 
     
     %% build the rectification matrix
-    H_affine = [eye(2),zeros(2,1); im_line_inf(:)'];
+    H_affine = [eye(2),zeros(2,1); im_line_infty(:)'];
     
     if debug
         % we can check that H^-T* imLinfty is the line at infinity in its canonical form:
         fprintf('The vanishing line is mapped to:\n');
-        disp(inv(H_affine)'*im_line_inf);
+        disp(inv(H_affine)'*im_line_infty);
     end
 
     
@@ -120,6 +124,15 @@ function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,
     [upper_shadow_point_affine(1),upper_shadow_point_affine(2)] = transformPointsForward(tform,upper_shadow_point(1),upper_shadow_point(2));
 
 
+    %% assign the original main points to the return struct points
+    points = struct('upper_left_point', upper_left_point, ...
+                    'upper_right_point', upper_right_point, ...
+                    'lower_right_point', lower_right_point, ...
+                    'lower_left_point', lower_left_point, ...
+                    'upper_shadow_point', upper_shadow_point, ...
+                    'horizontal_vp_1', vanishing_point_1, ...
+                    'horizontal_vp_2', vanishing_point_2);
+
     %% assign the rectified main points to the return struct points_affine
     points_affine = struct('upper_left_point', [upper_left_point_affine';1], ...
                            'upper_right_point', [upper_right_point_affine';1], ...
@@ -128,7 +141,7 @@ function [img_affine_reconstruction, points_affine] = affine_reconstruction(img,
                            'upper_shadow_point', [upper_shadow_point_affine';1]);
 
 
-    %% compute the ratio between facade 3 and the horizontal shadow segment dg (invariant ratio of length of colinear lines)
+    %% compute the ratio between facade 3 and the horizontal shadow segment dg (invariant ratio of length of collinear lines)
     facade_3_length = norm(lower_right_point_affine-lower_left_point_affine, 2);
     shadow_segment_length = norm(upper_shadow_point_affine-lower_left_point_affine, 2);
     
