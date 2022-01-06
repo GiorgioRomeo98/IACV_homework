@@ -18,8 +18,9 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
 
     % fit the homography from scene to image 
     H_omography = fitgeotrans([upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
-                         [points.upper_left_corner(1:2).'; points.lower_left_corner(1:2).'; points.lower_right_corner(1:2).'; points.upper_right_corner(1:2).'], ...
-                         'projective');
+                              [points.upper_left_corner(1:2).'; points.lower_left_corner(1:2).'; points.lower_right_corner(1:2).'; points.upper_right_corner(1:2).'], ...
+                              'projective');
+
     H_omography = H_omography.T.';
 
     % extract columns
@@ -37,7 +38,7 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     
     %% compute rotation of the world with respect to the camera (R cam -> world)
     % in this case the world is the vertical facade (face ?????)
-    R = [r1, r2, r3];
+    R = [r1, r3, r3];
 
     % due to noise in the data R may be not a true rotation matrix.
     % approximate it through svd, obtaining a orthogonal matrix
@@ -55,11 +56,11 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
 
 
     %% Display orientation and position from vertical facace (face ?????)
-    if debug
+%     if debug
         figure('Name', 'Camera location')
         plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
         hold on;
-    
+
         pcshow([[upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
                 zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1)], ...
                 'red','VerticalAxisDir', 'up', 'MarkerSize', 20);
@@ -77,12 +78,44 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
               [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
               [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0], ...
               'red');
+
         xlabel('X')
         ylabel('Y')
         zlabel('Z')
     
         saveas(gcf, 'images/camera_location.png')
-    end
+
+%     end
+
+
+%         figure('Name', 'Camera location')
+%         plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
+%         hold on;
+% 
+%         pcshow([[upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
+%                 zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1)], ...
+%                 'red','VerticalAxisDir', 'up', 'MarkerSize', 20);
+%     
+%         patch([upper_left_point(1); lower_left_point(1); lower_right_point(1); upper_right_point(1)], ...
+%               zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1),...
+%               [upper_left_point(2); lower_left_point(2); lower_right_point(2); upper_right_point(2)], ...
+%               'green');
+%     
+%         patch([upper_left_point(1); lower_left_point(1); lower_left_point(1); upper_left_point(1)], ...
+%               [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0],...
+%               [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
+%               'red');
+%     
+%         patch([upper_right_point(1); lower_right_point(1); lower_right_point(1); upper_right_point(1)], ...
+%               [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0],...
+%               [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
+%               'red');
+% 
+%         xlabel('X')
+%         ylabel('Y')
+%         zlabel('Z')
+%     
+%         saveas(gcf, 'images/camera_location.png')
 
 
 end
