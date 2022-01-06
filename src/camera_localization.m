@@ -16,6 +16,11 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     lower_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_length 0];
     upper_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_length LENGTH_LONGSIDE];
 
+    points.upper_left_corner = [272; 535; 1];
+    points.upper_right_corner = [732; 552; 1];
+    points.lower_right_corner = [802; 1295; 1];
+    points.lower_left_corner = [202; 1312; 1];
+
     % fit the homography from scene to image 
     H_omography = fitgeotrans([upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
                               [points.upper_left_corner(1:2).'; points.lower_left_corner(1:2).'; points.lower_right_corner(1:2).'; points.upper_right_corner(1:2).'], ...
@@ -28,7 +33,7 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     h2 = H_omography(:,2);
     h3 = H_omography(:,3);
     
-    % normalization factor.
+    % normalization factor
     lambda = 1 / norm(K \ h1);
     
     % r1 = K^-1 * h1 normalized
@@ -38,7 +43,7 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     
     %% compute rotation of the world with respect to the camera (R cam -> world)
     % in this case the world is the vertical facade (face ?????)
-    R = [r1, r3, r3];
+    R = [r1, r2, r3];
 
     % due to noise in the data R may be not a true rotation matrix.
     % approximate it through svd, obtaining a orthogonal matrix
@@ -53,6 +58,10 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     % since T is expressed in the camera reference frame we want it in the plane
     % reference frame, R.' is the rotation of the camera with respect to the plane
     cameraPosition = -R.'*T;
+    cameraPosition = cameraPosition ./ cameraPosition(2);
+    cameraPosition = cameraPosition .* 150;
+
+    display(cameraPosition)
 
 
     %% Display orientation and position from vertical facace (face ?????)
