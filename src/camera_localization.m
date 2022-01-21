@@ -61,11 +61,11 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     cameraPosition = cameraPosition ./ cameraPosition(2);
     cameraPosition = cameraPosition .* 150;
 
-    display(cameraPosition)
+    %display(cameraPosition)
 
 
     %% Display orientation and position from vertical facace (face ?????)
-%     if debug
+    if debug
         figure('Name', 'Camera location')
         plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
         hold on;
@@ -94,7 +94,7 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     
         saveas(gcf, 'images/camera_location.png')
 
-%     end
+    end
 
 
 %         figure('Name', 'Camera location')

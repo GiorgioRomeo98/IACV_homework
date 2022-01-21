@@ -59,8 +59,6 @@ function [K, points] = camera_calibration(img, points, H, debug)
         
         plot([points.horizontal_vp_1(1), points.horizontal_vp_2(1)], [points.horizontal_vp_1(2), points.horizontal_vp_2(2)], 'r--')
 
-
-
     end
 
 
@@ -104,7 +102,7 @@ function [K, points] = camera_calibration(img, points, H, debug)
     u0 = -IAC(1,3)/(alfa^2);
     v0 = -IAC(2,3);
     fy = sqrt(IAC(3,3) - (alfa^2)*(u0^2) - (v0^2));
-    fx = fy /alfa;
+    fx = fy / alfa;
     K = [fx 0 u0; 0 fy v0; 0 0 1];
 
 

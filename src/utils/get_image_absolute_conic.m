@@ -19,7 +19,7 @@ function image_absolute_conic = get_image_absolute_conic(l_infs, vps, vp1s, vp2s
     
     % first add constraints on l_infs and vps
     % 2 constraints for each couple
-    % [l_inf]x W vp = 0
+    % [l_inf] x W vp = 0
     eqn = [];
     for ii = 1:size(l_infs,2)
         

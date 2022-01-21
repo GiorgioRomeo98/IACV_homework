@@ -14,8 +14,9 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
 
 
     %% compute the image of the absolute conic through the calibration matrix K
-    imIAC = inv(K * K');
-    imIAC = imIAC / norm(imIAC);
+    IAC = inv(K * K');
+  
+    IAC = IAC / norm(IAC);
 
 
     %% image of the line at the infinite belonging to a plane orthogonal to the horizontal one
@@ -26,12 +27,12 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
 
 
     %% assign the coefficients to write the equations
-    a1 = imIAC(1,1);
-    b1 = imIAC(1,2)*2;
-    c1 = imIAC(1,3)*2;
-    d1 = imIAC(2,2);
-    e1 = imIAC(2,3)*2;
-    f1 = imIAC(3,3);
+    a1 = IAC(1,1);
+    b1 = IAC(1,2)*2;
+    c1 = IAC(1,3)*2;
+    d1 = IAC(2,2);
+    e1 = IAC(2,3)*2;
+    f1 = IAC(3,3);
     a2 = vertical_im_line_infty(1);
     b2 = vertical_im_line_infty(2);
     c2 = vertical_im_line_infty(3);

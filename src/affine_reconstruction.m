@@ -28,13 +28,13 @@ function [img_affine_reconstruction, H_affine, points, points_affine] = affine_r
 
     
     %% istantiate main points
-    % istantiate the four points used to compute the parallel lines
+    % istantiate four points used to compute the parallel lines
     upper_left_point = [227; 334; 1];   % a
     upper_right_point = [821; 364; 1];  % b
     lower_right_point = [732; 552; 1];  % c
     lower_left_point = [271; 535; 1];   % d
 
-    % istantiate the two point belonging to the shadow vertical line
+    % istantiate two points belonging to the shadow vertical line
     lower_shadow_point = [343; 1300; 1];
     middle_shadow_point = [342; 1065; 1];
     
@@ -101,7 +101,7 @@ function [img_affine_reconstruction, H_affine, points, points_affine] = affine_r
 
     
     %% build the rectification matrix
-    H_affine = [eye(2),zeros(2,1); im_line_infty(:)'];
+    H_affine = [eye(2),zeros(2,1); im_line_infty(:).'];
     
     if debug
         % we can check that H^-T* imLinfty is the line at infinity in its canonical form:
