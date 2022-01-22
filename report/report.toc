@@ -5,3 +5,4 @@
 \contentsline {subsection}{\numberline {2.3}Corner detection}{6}{subsection.2.3}%
 \contentsline {section}{\numberline {3}2D reconstruction of a horizontal section}{7}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Affine reconstruction}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Shape reconstruction}{9}{subsection.3.2}%

@@ -138,9 +138,22 @@ The processed image with extracted corners is shown in figure \ref{image_corners
 \textbf{Rectify (2D reconstruct) the horizontal section of the building from the useful selected image lines and features, including vertical shadows. In particular, determine the ratio between the width of facade 2 (or 4) and the width of facade 3.} \hfill \break
 We performed 2D reconstruction of the horizontal section of the building utilizing a stratified approach instead of a direct one in order to increase robustness (numerical errors should decrease). The stratified approach consists of performing sequentially an affine reconstruction and a shape reconstruction of the original image. We first computed the affine mapping $H_{affine}$ that maps the original image to its affine reconstruction. Then, we computed the similarity mapping $H_{shape}$ that maps the obtained affine reconstruction to its shape reconstruction. The overall mapping $H_{r}$ that maps the original image to its shape reconstruction can be computed as follows:
 $$ H_{r} = H_{shape} * H_{affine} $$
+The overall stratified approach can be summarized in the following diagram:\\\\
+\begin{tikzpicture}[rounded corners=2pt,inner sep=5pt,node distance=0.8cm]
+	\node [draw](scene) at (0,0) {\textit{Scene}};
+	\node [draw,right=of scene] (image) at (1.5,2.5) {\textit{Image}};
+	\node [draw,right=of image] (affine) at (6,2.5){\textit{Affine Reconstruction}};
+	\node [draw,right=of affine] (shape) at (9.5,0) {\textit{Shape Reconstruction}};
+	\path[every node/.style={sloped,anchor=south,auto=false}]
+	(scene) edge node {$H_{unknown}$} (image)
+	(image) edge node {$H_{affine}$}  (affine)
+	(image) edge node {$H_{r}$}  (shape)
+	(affine) edge node {$H_{shape}$}  (shape)
+	(scene) edge node {$H_{sim}$}  (shape);
+\end{tikzpicture}
 
 \subsection{Affine reconstruction}
-To compute $H_{affine}$ we exploited the fact that a projective mapping $H$ maps the line at the infinity $l_{\infty} = [0\quad0\quad1]^\intercal$ onto itself if and only if $H$ is affine. Thus, this mapping must map any point $x'$ belonging to	$l'_{\infty}$ (image of the $l_{\infty}$) onto a point at the infinity, namely:
+An affine transformation is any transformation preserving: parallelism, ratio of areas, ratio of length on collinear or parallel lines, linear combination of vectors, line at the infinity, invariants of a projective transformation. To compute $H_{affine}$ we exploited the fact that a projective mapping $H$ maps the line at the infinity $l_{\infty} = [0\quad0\quad1]^\intercal$ onto itself if and only if $H$ is affine. Thus, this mapping must map any point $x'$ belonging to	$l'_{\infty}$ (image of the $l_{\infty}$) onto a point at the infinity, namely:
 
 \begin{equation}
 	H_{affine} \; x' = 
@@ -175,25 +188,85 @@ The resulting affine reconstruction obtained applying $H_{affine}$ to the origin
 
 \begin{figure}[!h]
 	\centering
-	\begin{minipage}{.45\textwidth}
+	\begin{minipage}{.40\textwidth}
 		\centering
-		\includegraphics[scale = 0.4]{image_original_lines.png}
+		\includegraphics[scale = 0.35]{image_original_lines.png}
 		\captionof{figure}{Features and lines in the original image used for affine and shape reconstruction}
 		\label{image_original_lines}
 	\end{minipage}%
-	\begin{minipage}{.5\textwidth}
+	\quad
+	\begin{minipage}{.55\textwidth}
 		\centering
-		\includegraphics[scale = 0.3]{image_affine_reconstruction.png}
+		\includegraphics[scale = 0.35]{image_affine_reconstruction.png}
 		\captionof{figure}{Affine reconstruction of the original image}
 		\label{image_affine_reconstruction}
 	\end{minipage}
 \end{figure}
+\pagebreak
 
-\begin{figure*}[!h]
-
-\end{figure*}
-
-
-
+\subsection{Shape reconstruction}
+A similarity transformation is any transformation preserving: ratio of length, angles, circular points, invariants of both projective and affine transformations. To compute $H_{shape}$ we exploited the fact that a projective mapping $H$ maps the circular points $\textbf{I}$ and $\textbf{J}$ onto themselves if and only if $H$ is  a similarity. A crucial property is that, after an affine reconstruction, the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ can be written as:
+\begin{equation}
+	C^{*'}_\infty = 
+	\begin{bmatrix}
+		KK^\intercal  & 0 \\ 0^\intercal & 0
+	\end{bmatrix}
+\end{equation}
+where $K$ is a 2 x 2 invertible matrix. $S = KK^\intercal$ is a symmetric and homogeneous matrix, thus there are only 2 unknowns to identify $C^{*'}_\infty$. We found out the first unknown exploiting known angles: given two lines $l = [l_1\quad l_2 \quad l_3]^\intercal$ and $m = [m_1\quad m_2 \quad m_3]^\intercal$, the term $l_1 m_1 + l_2 m_2$ can be written as:
+\begin{equation}
+	\begin{bmatrix}
+		l_1 & l_2 & l_3
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+	\end{bmatrix} *
+	\begin{bmatrix}
+		m_1 \\ m_2 \\ m_3
+	\end{bmatrix}
+	= l^\intercal C^{*}_\infty m
+\end{equation}
+Furthermore, from the transformation rules we can derive: $l^\intercal C^{*}_\infty m = l{'^\intercal} C^{*'}_\infty m'$. Thus, we may compute the angle $\theta$ between two lines as:
+\begin{equation}
+	\label{eqn:angle}
+	\cos(\theta) = \frac{l_1 m_1 + l_2  m_2}{\sqrt{(l_1^2 + l_2^2)(m_1^2 + m_2 ^2)}}
+	=
+	\frac{l^\intercal C^{*}_\infty m}{\sqrt{(l^\intercal C^{*}_\infty l)(m^\intercal C^{*}_\infty m)}} 
+	= 
+	\frac{l{'^\intercal} C^{*'}_\infty m'}{\sqrt{(l^{'\intercal} C^{*'}_\infty l')(m^{'\intercal} C^{*'}_\infty m')}}
+\end{equation}
+Referring to Fig. \ref{image_affine_reconstruction}, we selected the pair of lines ad and dc (images of orthogonal lines in the real scene) to exploit the fact that $\cos(\theta) = 0$ for orthogonal lines. Indeed, equation (\ref{eqn:angle}) can be simplified as follows:
+\begin{equation}
+	\label{eqn:constraint_1}
+	\cos(\theta) = 0 =
+	\frac{l{'^\intercal} C^{*'}_\infty m'}{\sqrt{(l^{'\intercal} C^{*'}_\infty l')(m^{'\intercal} C^{*'}_\infty m')}} 
+	\Rightarrow
+	l{'^\intercal} C^{*'}_\infty m' = 0
+\end{equation}
+More specifically, we wrote equation (\ref{eqn:constraint_1}) as:
+\begin{equation}
+	\begin{bmatrix}
+		l_1 & l_2 & l_3
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		a & b & 0 \\ b & c & 0 \\ 0 & 0 & 0
+	\end{bmatrix} *
+	\begin{bmatrix}
+		m_1 \\ m_2 \\ m_3
+	\end{bmatrix}
+	= l_1 m_1 a + l_2 m_1 b + l_1 m_2 b + m_2 l_2 c = 0
+\end{equation}
+Eventually, we obtained the first constraint:
+\begin{equation}
+	\begin{bmatrix}
+		l_1 m_1 & l_1 m_2 + l_2 m_1 & l_2 m_2
+	\end{bmatrix}
+	*
+	\begin{bmatrix}
+		a \\ b \\ c
+	\end{bmatrix}
+	= 0
+\end{equation}
 
 \end{document}
