@@ -144,7 +144,7 @@ The overall stratified approach can be summarized in the following diagram:\\\\
 	\node [draw,right=of scene] (image) at (1.5,2.5) {\textit{Image}};
 	\node [draw,right=of image] (affine) at (6,2.5){\textit{Affine Reconstruction}};
 	\node [draw,right=of affine] (shape) at (9.5,0) {\textit{Shape Reconstruction}};
-	\path[every node/.style={sloped,anchor=south,auto=false}]
+	\path [->, every node/.style={sloped,anchor=south,auto=false}]
 	(scene) edge node {$H_{unknown}$} (image)
 	(image) edge node {$H_{affine}$}  (affine)
 	(image) edge node {$H_{r}$}  (shape)
@@ -153,7 +153,7 @@ The overall stratified approach can be summarized in the following diagram:\\\\
 \end{tikzpicture}
 
 \subsection{Affine reconstruction}
-An affine transformation is any transformation preserving: parallelism, ratio of areas, ratio of length on collinear or parallel lines, linear combination of vectors, line at the infinity, invariants of a projective transformation. To compute $H_{affine}$ we exploited the fact that a projective mapping $H$ maps the line at the infinity $l_{\infty} = [0\quad0\quad1]^\intercal$ onto itself if and only if $H$ is affine. Thus, this mapping must map any point $x'$ belonging to	$l'_{\infty}$ (image of the $l_{\infty}$) onto a point at the infinity, namely:
+An affine transformation is any transformation preserving: parallelism, ratio of areas, ratio of length on collinear or parallel lines, linear combination of vectors, line at the infinity, invariants of a projective transformation. To compute $H_{affine}$ we exploited the fact that a projective mapping $H$ maps the line at the infinity $l_{\infty} = [0\quad0\quad1]^\intercal$ onto itself if and only if $H$ is affine. Thus, this mapping must map any point $x'$ belonging to	$l'_{\infty}$ (image of the $l_{\infty}$) onto a point at the infinity, namely:\\
 
 \begin{equation}
 	H_{affine} \; x' = 
@@ -182,9 +182,9 @@ Taking into account that $H_{affine}$ should have the previous form and be non-s
 	\end{bmatrix}
 \end{equation}
 
-For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue point a, b, c and d. Afterwards, we computed the first vanishing point vp1 (not represented in the figure) as the intersection of the two lines ab and dc (images of parallel lines in the real scene), while the second vanishing point vp2 as the intersection of the two lines ad and bc (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated.
+For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue points $a, b, c and d$. Afterwards, we computed the first vanishing point vp1 (not represented in the figure) as the intersection of the two lines $ab$ and $dc$ (images of parallel lines in the real scene), while the second vanishing point vp2 as the intersection of the two lines $ad$ and $bc$ (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated. Note that "line $ab$" should be properly defined as "line passing through point $a$ and $b$" (similar for all other lines).
 
-The resulting affine reconstruction obtained applying $H_{affine}$ to the original image is shown in Fig. \ref{image_affine_reconstruction}.
+The resulting affine reconstruction obtained applying $H_{affine}$ to the original image is shown in Fig. \ref{image_affine_reconstruction}. Note that the affine transformation $H_{affine}$ was also applied to the blue $(a, b, c, d)$ and green $(g)$ points to represent them in the affine reconstruction.
 
 \begin{figure}[!h]
 	\centering
@@ -268,5 +268,123 @@ Eventually, we obtained the first constraint:
 	\end{bmatrix}
 	= 0
 \end{equation}
+
+Note that we could not select another pair of orthogonal lines such as dc and cb for the second constraint because this would not have been independent from the previous constraints. For the last constraint, we exploited the invariance of ratio of length in similarity transformations.
+
+First of all, as shown in Fig. \ref{scene_triangles}, exploiting the fact that the sun is a point at the infinite along the direction $[3.9\quad\text{-}1]$ ($z$ is irrelevant) and triangles 1 and 2 are similar (same angles), we computed the ratio $k$ between the lengths of segments $gd$ and $ad$: $k = 1/3.9$. Segment $ad$ represents the width of facade 2, while $gd$ represents the width of the shadow segment defined from point $d$ (junction of facade 2 and 3) and point $g$ (intersection of the vertical shadow $eg$ and the plane defined by the blue points $(a, b, c, d)$, as shown in Fig. \ref{image_original_lines}).
+The two segments were computed as:
+\begin{equation}
+	gd = 
+	\begin{bmatrix}
+		g'_1 - d'_1 \\ g'_2 - d'_2 \\ g'_3 - d'_3
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		l'_1 \\ l'_2 \\ l'_3
+	\end{bmatrix}
+	= l' , \quad
+	ad = 
+	\begin{bmatrix}
+		a'_1 - d'_1 \\ a'_2 - d'_2 \\ a'_3 - d'_3
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		m'_1 \\ m'_2 \\ m'_3
+	\end{bmatrix}
+	= m'
+\end{equation}
+Furthermore, exploiting the fact that $l/m = 1/3.9 = k$, we computed:
+\begin{equation}
+	\label{eqn:ratio}
+	l_1^{'2} + l_2^{'2} = k^2 (m_1^{'2} + m_2^{'2})
+	\Rightarrow
+	l^{'\intercal} C^{*'}_\infty l' = k^2 (m^{'\intercal} C^{*'}_\infty m')
+\end{equation}
+More specifically, we wrote equation (\ref{eqn:ratio}) as:
+\begin{equation}
+	\begin{bmatrix}
+		l_1^{'2} & 2 l'_1 l'_2 & l_2^{'2}
+	\end{bmatrix}
+	*
+	\begin{bmatrix}
+		a \\ b \\ c
+	\end{bmatrix}
+	= k^2
+	\begin{bmatrix}
+		m_1^{'2} & 2 m'_1 m'_2 & m_2^{'2}
+	\end{bmatrix}
+	*
+	\begin{bmatrix}
+		a \\ b \\ c
+	\end{bmatrix}
+\end{equation}
+Eventually, we obtained the second constraint:
+\begin{equation}
+	\begin{bmatrix}
+		l_1^{'2} - k^2 m_1^{'2} & 2 (l'_1 l'_2 - k^2 m'_1 m'_2) & l_2^{'2} - k^2 m_2^{'2}
+	\end{bmatrix}
+	*
+	\begin{bmatrix}
+		a \\ b \\ c
+	\end{bmatrix}
+	= 0
+\end{equation}
+Once we found the image of the dual conic $C^{*'}_\infty$, using the single value decomposition (SVD) method, we computed:
+$$SVD(C^{*'}_\infty) = U D V^\intercal = H_{shape}^{-1} C^*_\infty H_{shape}^{-1\intercal}$$
+However, since we did not obtain:
+\begin{equation}
+	D = C^*_\infty =
+	\begin{bmatrix}
+		1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+\end{equation}
+we exploited the fact that:
+\begin{equation}
+	D =
+	\begin{bmatrix}
+		\sqrt{D_{11}} & 0 & 0 \\ 0 & \sqrt{D_{22}} & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	\begin{bmatrix}
+		1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	\begin{bmatrix}
+		\sqrt{D_{11}} & 0 & 0 \\ 0 & \sqrt{D_{22}} & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	= D_S C^*_\infty D_S
+\end{equation}
+obtaining:
+\begin{equation}
+	U D V^\intercal = U D_S C^*_\infty D_S V^\intercal
+\end{equation}
+Eventually, we computed:
+$$H_{shape} = (U D_S)^{-1}$$
+The resulting shape reconstruction obtained applying $H_{shape}$ to the affine reconstruction is shown in Fig. \ref{image_shape_reconstruction}. Note that the shape transformation $H_{shape}$ was also applied to the blue $(a, b, c, d)$ and green $(g)$ points to represent them in the shape reconstruction.
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.45\textwidth}
+		\centering
+		\includegraphics[scale = 0.75]{scene_triangles.png}
+		\captionof{figure}{Similar triangles}
+		\label{scene_triangles}
+	\end{minipage}%
+	\quad
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[scale = 0.275]{image_affine_reconstruction.png}
+		\captionof{figure}{shape reconstruction of the horizontal section of the buiding}
+		\label{image_shape_reconstruction}
+	\end{minipage}
+\end{figure}
+
+\subsection{Ratio results}
+The final task of this point was to compute the ratio between the width of facade 3 and width of facade 3. Thus, referring to Fig. \ref{image_shape_reconstruction}, we measured the length of segment $ad$ (width facade 2) and length of segment $dg$ (width facade 3), obtaining:
+$$\frac{Facade\_2_{width}}{Facade\_3_{width}} = 0.659764$$
+Even if not required, we also computed the ratio between the width of facade 3 and width of the shadow segment $dg$, both after affine and shape reconstruction. We obtained the same result (invariance of the ratio of length):
+$$\frac{Facade\_3_{width}}{Shadow\_Segment_{width}} = 6.891124$$
+
+
+\section{Calibration}
+\textbf{First extract a vertical vanishing point and then use it together with useful information extracted during the rectification step, in order to estimate the calibration matrix K containing the intrinsic parameters of the camera, namely: focal distance, aspect ratio and position of principal points.} \hfill \break
 
 \end{document}

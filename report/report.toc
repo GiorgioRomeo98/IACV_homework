@@ -6,3 +6,5 @@
 \contentsline {section}{\numberline {3}2D reconstruction of a horizontal section}{7}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Affine reconstruction}{7}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Shape reconstruction}{9}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Ratio results}{11}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Calibration}{12}{section.4}%

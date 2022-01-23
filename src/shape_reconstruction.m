@@ -60,15 +60,15 @@ function [img_shape_reconstruction, H_shape, points_shape, ratio_f2_f3] = shape_
     %% compute the rectifying homography
     imDCCP = [S,zeros(2,1); zeros(1,3)]; % the image of the circular points
     [U,D,V] = svd(S);
+
     A = U*sqrt(D)*V';
     H = eye(3);
     H(1,1) = A(1,1);
     H(1,2) = A(1,2);
     H(2,1) = A(2,1);
     H(2,2) = A(2,2);
-    
+
     H_shape = inv(H);
-    Cinfty = [eye(2),zeros(2,1);zeros(1,3)];
     tform = projective2d(H_shape');
     img_shape_reconstruction = imwarp(img_affine,tform);
     img_shape_reconstruction = imcrop(img_shape_reconstruction,[0, 380, 3140, 3000]);

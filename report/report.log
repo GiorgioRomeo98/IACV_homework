@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  22 JAN 2022 18:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  23 JAN 2022 12:26
 entering extended mode
 **./report.tex
 (report.tex
@@ -953,7 +953,7 @@ LaTeX Info: Redefining \nameref on input line 33.
 \@outlinefile=\write4
 \openout4 = `report.out'.
 
-<./images/Logo_Politecnico_Milano.png, id=38, 666.49pt x 489.83pt>
+<./images/Logo_Politecnico_Milano.png, id=46, 666.49pt x 489.83pt>
 File: ./images/Logo_Politecnico_Milano.png Graphic file (type png)
 <use ./images/Logo_Politecnico_Milano.png>
 Package pdftex.def Info: ./images/Logo_Politecnico_Milano.png  used on input li
@@ -1002,32 +1002,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
 
-<./images/scene.png, id=67, 242.9075pt x 161.60374pt>
+<./images/scene.png, id=77, 242.9075pt x 161.60374pt>
 File: ./images/scene.png Graphic file (type png)
 <use ./images/scene.png>
 Package pdftex.def Info: ./images/scene.png  used on input line 58.
 (pdftex.def)             Requested size: 215.0023pt x 143.0378pt.
-<../src/images//Villa.png, id=68, 1082.0425pt x 1429.34pt>
+<../src/images//Villa.png, id=78, 1082.0425pt x 1429.34pt>
 File: ../src/images//Villa.png Graphic file (type png)
 <use ../src/images//Villa.png>
 Package pdftex.def Info: ../src/images//Villa.png  used on input line 64.
 (pdftex.def)             Requested size: 107.50114pt x 142.00455pt.
 [3 <./images/scene.png> <../src/images//Villa.png>]
-<../src/images//image_edges.png, id=80, 433.1382pt x 572.8602pt>
+<../src/images//image_edges.png, id=90, 433.1382pt x 572.8602pt>
 File: ../src/images//image_edges.png Graphic file (type png)
 <use ../src/images//image_edges.png>
 Package pdftex.def Info: ../src/images//image_edges.png  used on input line 92.
 
 (pdftex.def)             Requested size: 184.89883pt x 244.54189pt.
  [4 <../src/images//image_edges.png (PNG copy)>]
-<../src/images//image_lines.png, id=88, 433.1382pt x 572.8602pt>
+<../src/images//image_lines.png, id=98, 433.1382pt x 572.8602pt>
 File: ../src/images//image_lines.png Graphic file (type png)
 <use ../src/images//image_lines.png>
 Package pdftex.def Info: ../src/images//image_lines.png  used on input line 117
 .
 (pdftex.def)             Requested size: 161.94067pt x 214.18394pt.
  [5 <../src/images//image_lines.png (PNG copy)>]
-<../src/images//image_corners.png, id=96, 433.1382pt x 572.8602pt>
+<../src/images//image_corners.png, id=106, 433.1382pt x 572.8602pt>
 File: ../src/images//image_corners.png Graphic file (type png)
 <use ../src/images//image_corners.png>
 Package pdftex.def Info: ../src/images//image_corners.png  used on input line 1
@@ -1038,14 +1038,19 @@ Underfull \hbox (badness 10000) in paragraph at lines 140--154
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 156--157
+
+ []
+
 [7]
-<../src/images//image_original_lines.png, id=113, 433.1382pt x 572.8602pt>
+<../src/images//image_original_lines.png, id=123, 433.1382pt x 572.8602pt>
 File: ../src/images//image_original_lines.png Graphic file (type png)
 <use ../src/images//image_original_lines.png>
 Package pdftex.def Info: ../src/images//image_original_lines.png  used on input
  line 193.
 (pdftex.def)             Requested size: 151.60063pt x 200.50407pt.
-<../src/images//image_affine_reconstruction.png, id=114, 800.2698pt x 530.4618p
+<../src/images//image_affine_reconstruction.png, id=124, 800.2698pt x 530.4618p
 t>
 File: ../src/images//image_affine_reconstruction.png Graphic file (type png)
 <use ../src/images//image_affine_reconstruction.png>
@@ -1058,18 +1063,39 @@ Overfull \hbox (43.59479pt too wide) in paragraph at lines 200--201
  []
 
 [8 <../src/images//image_original_lines.png (PNG copy)> <../src/images//image_a
-ffine_reconstruction.png (PNG copy)>] [9] (report.aux)
+ffine_reconstruction.png (PNG copy)>] [9] [10]
+<./images/scene_triangles.png, id=160, 242.9075pt x 174.6525pt>
+File: ./images/scene_triangles.png Graphic file (type png)
+<use ./images/scene_triangles.png>
+Package pdftex.def Info: ./images/scene_triangles.png  used on input line 367.
+(pdftex.def)             Requested size: 182.18016pt x 130.98904pt.
+File: ../src/images//image_affine_reconstruction.png Graphic file (type png)
+<use ../src/images//image_affine_reconstruction.png>
+Package pdftex.def Info: ../src/images//image_affine_reconstruction.png  used o
+n input line 374.
+(pdftex.def)             Requested size: 220.06877pt x 145.8734pt.
+
+Overfull \hbox (5.06647pt too wide) in paragraph at lines 374--375
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 388--389
+
+ []
+
+[11 <./images/scene_triangles.png>] [12] (report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: B6A7C570F47174A42ACD3490B05615C4;1227.
+(rerunfilecheck)             Checksum: E144949FAAC19D0CA5F4079A2AE1BA5D;1451.
  ) 
 Here is how much of TeX's memory you used:
- 24629 strings out of 479321
- 457657 string characters out of 2856107
- 770866 words of memory out of 3000000
- 41612 multiletter control sequences out of 15000+600000
+ 24668 strings out of 479321
+ 458453 string characters out of 2856107
+ 773059 words of memory out of 3000000
+ 41637 multiletter control sequences out of 15000+600000
  411203 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,9n,102p,860b,751s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 101i,9n,102p,995b,786s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\Utente\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcr
 m1095.pk><C:/Users/Utente/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb><C:/Users/Utente/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -1087,9 +1113,9 @@ pe1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Utente/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Utente/AppData/Local/Progra
 ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Utente/AppData/Lo
 cal/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on report.pdf (9 pages, 6920525 bytes).
+Output written on report.pdf (12 pages, 6939325 bytes).
 PDF statistics:
- 193 PDF objects out of 1000 (max. 8388607)
- 33 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 234 PDF objects out of 1000 (max. 8388607)
+ 46 named destinations out of 1000 (max. 500000)
+ 138 words of extra memory for PDF output out of 10000 (max. 10000000)
 
