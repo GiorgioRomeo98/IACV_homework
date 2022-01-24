@@ -1,3 +1,0 @@
-In an image, an edge is a curve that follows a path of rapid change in image intensity. Edges are often associated with the boundaries of objects in a scene.
-Different algorithms are suited for detecting edges of straight lines, round objects, or arbitrarily shaped regions. Conversely, you can detect homogenous blocks
-that lack edges.

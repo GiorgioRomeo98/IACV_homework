@@ -18,7 +18,6 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
   
     IAC = IAC / norm(IAC);
 
-
     %% image of the line at the infinite belonging to a plane orthogonal to the horizontal one
     vertical_im_line_infty = cross(points.vertical_vp_1, points.vertical_vp_2);
 
@@ -107,7 +106,7 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
     facade_3_length = norm(lower_right_corner_rect-lower_left_corner_rect, 2);
     facade_3_height = norm(upper_right_corner_rect-lower_right_corner_rect, 2);
 
-    ratio_f3_height_f3_length = facade_3_height / facade_3_length;     
+    ratio_f3_height_f3_length = facade_3_height / facade_3_length;
 
 
     %% plot the result
@@ -133,8 +132,6 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
 
     end
  
-
-
 
 end
 

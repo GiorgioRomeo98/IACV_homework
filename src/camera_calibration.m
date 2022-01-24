@@ -74,13 +74,18 @@ function [K, points] = camera_calibration(img, points, H, debug)
 
         plot([points.lower_left_corner(1), points.vertical_vp_1(1)], [points.lower_left_corner(2), points.vertical_vp_1(2)], 'g');
         plot([points.lower_right_corner(1), points.vertical_vp_1(1)], [points.lower_right_corner(2), points.vertical_vp_1(2)], 'g');
+        plot([points.upper_left_corner(1), points.upper_right_corner(1)], [points.upper_left_corner(2), points.upper_right_corner(2)], 'g');
+        plot([points.lower_left_corner(1), points.lower_right_corner(1)], [points.lower_left_corner(2), points.lower_right_corner(2)], 'g');
+        saveas(gcf, "images/image_original_vertical_vp.png");
         plot([points.upper_left_corner(1), points.vertical_vp_2(1)], [points.upper_left_corner(2), points.vertical_vp_2(2)], 'g');
         plot([points.lower_left_corner(1), points.vertical_vp_2(1)], [points.lower_left_corner(2), points.vertical_vp_2(2)], 'g');
 
-        text(points.vertical_vp_1(1), points.vertical_vp_1(2), 'vp3', 'FontSize', FNT_SZ, 'Color', 'r')
-        text(points.vertical_vp_2(1), points.vertical_vp_2(2), 'vp4', 'FontSize', FNT_SZ, 'Color', 'r')
+        %text(points.vertical_vp_1(1), points.vertical_vp_1(2), 'vp3', 'FontSize', FNT_SZ, 'Color', 'r')
+        %text(points.vertical_vp_2(1), points.vertical_vp_2(2), 'vp4', 'FontSize', FNT_SZ, 'Color', 'r')
 
         plot([points.vertical_vp_1(1), points.vertical_vp_2(1)], [points.vertical_vp_1(2), points.vertical_vp_2(2)], 'r--')
+
+        saveas(gcf, "images/image_two_original_vertical_vp.png");
 
     end
 

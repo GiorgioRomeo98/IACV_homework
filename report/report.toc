@@ -8,3 +8,5 @@
 \contentsline {subsection}{\numberline {3.2}Shape reconstruction}{9}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Ratio results}{11}{subsection.3.3}%
 \contentsline {section}{\numberline {4}Calibration}{12}{section.4}%
+\contentsline {section}{\numberline {5}Reconstruction of a vertical facade}{14}{section.5}%
+\contentsline {section}{\numberline {6}Localization}{15}{section.6}%

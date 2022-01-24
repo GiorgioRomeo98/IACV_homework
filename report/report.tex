@@ -153,6 +153,7 @@ The overall stratified approach can be summarized in the following diagram:\\\\
 \end{tikzpicture}
 
 \subsection{Affine reconstruction}
+\label{affine_reconstruction}
 An affine transformation is any transformation preserving: parallelism, ratio of areas, ratio of length on collinear or parallel lines, linear combination of vectors, line at the infinity, invariants of a projective transformation. To compute $H_{affine}$ we exploited the fact that a projective mapping $H$ maps the line at the infinity $l_{\infty} = [0\quad0\quad1]^\intercal$ onto itself if and only if $H$ is affine. Thus, this mapping must map any point $x'$ belonging to	$l'_{\infty}$ (image of the $l_{\infty}$) onto a point at the infinity, namely:\\
 
 \begin{equation}
@@ -182,7 +183,7 @@ Taking into account that $H_{affine}$ should have the previous form and be non-s
 	\end{bmatrix}
 \end{equation}
 
-For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue points $a, b, c and d$. Afterwards, we computed the first vanishing point vp1 (not represented in the figure) as the intersection of the two lines $ab$ and $dc$ (images of parallel lines in the real scene), while the second vanishing point vp2 as the intersection of the two lines $ad$ and $bc$ (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated. Note that "line $ab$" should be properly defined as "line passing through point $a$ and $b$" (similar for all other lines).
+For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue points $a, b, c \, \text{and}\, d$. Afterwards, we computed the first vanishing point vp1 (not represented in the figure) as the intersection of the two lines $ab$ and $dc$ (images of parallel lines in the real scene), while the second vanishing point vp2 as the intersection of the two lines $ad$ and $bc$ (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated. Note that "line $ab$" should be properly defined as "line passing through point $a$ and $b$" (similar for all other lines).
 
 The resulting affine reconstruction obtained applying $H_{affine}$ to the original image is shown in Fig. \ref{image_affine_reconstruction}. Note that the affine transformation $H_{affine}$ was also applied to the blue $(a, b, c, d)$ and green $(g)$ points to represent them in the affine reconstruction.
 
@@ -204,7 +205,7 @@ The resulting affine reconstruction obtained applying $H_{affine}$ to the origin
 \end{figure}
 \pagebreak
 
-\subsection{Shape reconstruction}
+\subsection{Shape reconstruction} \label{shape_reconstruction}
 A similarity transformation is any transformation preserving: ratio of length, angles, circular points, invariants of both projective and affine transformations. To compute $H_{shape}$ we exploited the fact that a projective mapping $H$ maps the circular points $\textbf{I}$ and $\textbf{J}$ onto themselves if and only if $H$ is  a similarity. A crucial property is that, after an affine reconstruction, the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ can be written as:
 \begin{equation}
 	C^{*'}_\infty = 
@@ -385,6 +386,145 @@ $$\frac{Facade\_3_{width}}{Shadow\_Segment_{width}} = 6.891124$$
 
 
 \section{Calibration}
-\textbf{First extract a vertical vanishing point and then use it together with useful information extracted during the rectification step, in order to estimate the calibration matrix K containing the intrinsic parameters of the camera, namely: focal distance, aspect ratio and position of principal points.} \hfill \break
+\textbf{First extract a vertical vanishing point and then use it together with useful information extracted during the rectification step, in order to estimate the calibration matrix $K$ containing the intrinsic parameters of the camera, namely: focal distance, aspect ratio and position of principal point.} \hfill \break
+Calibration matrix $K$ is defined as:
+\begin{equation} \label{keq}
+	K =
+	\begin{bmatrix}
+		f_x  && 0 && u_0 \\ 0 && f_y && v_0 \\ 0 && 0 && 1
+	\end{bmatrix}
+\end{equation}
+The relation between the image of the absolute conic $\omega$ and the calibration matrix $K$ is:
+\begin{equation}
+	\label{eqn:omega_K}
+	\omega = (KK^t)^{-1}
+\end{equation}
+Furthermore, for a zero skew camera $\omega$ is given by:
+\begin{equation}
+	\label{eqn:omega}
+	\omega = 
+	\begin{bmatrix}
+		\alpha^2 && 0 && -u_0 \alpha^2 \\ 0 && 1 && -v_0 \\  -u_0 \alpha^2 && -v_0 && f_y^2 +\alpha^2 u_0^2 + v_0^2
+	\end{bmatrix}
+\end{equation}
+that is a symmetric matrix with 4 degrees of freedom, hence just 4 constraints on $\omega$ were required. For computing the constraints we needed:
+\begin{itemize}
+	\item the overall mapping $ H_{r} = H_{shape} * H_{affine} $
+	\item the image of the line at the infinity $l'_\infty$ (see section \ref{affine_reconstruction})
+	\item the vanishing point $vp_{vertical}$ along the direction orthogonal to the horizontal plane defined by points $(a, b, c, d)$ (see Fig. \ref{image_original_lines}). In particular, referring to Fig. \ref{image_original_vertical_vp}, we computed the vertical vanishing point as the intersection between lines $he$ and $gf$ (images of parallel lines in the real scene). 
+\end{itemize}
+The constraints were computed exploiting:
+\begin{itemize}
+	\item the image of the circular point $\textbf{I}'$:
+	\begin{equation}
+		\textbf{I}' = H_r^{-1} \textbf{I} =
+		\begin{bmatrix}
+			h_1 & h_2 & h_3
+		\end{bmatrix}
+		\begin{bmatrix}
+			1 \\ i \\ 0
+		\end{bmatrix}
+		= h_1 + ih_2
+		\quad \text{and} \quad (h_1 + ih_2)^\intercal \omega (h_1 + ih_2) = 0	
+	\end{equation}
+	leading to constraints:
+	$$h_1^\intercal \omega h_2 = 0 \quad \text{and} \quad h_1^\intercal \omega h_1 = h_2^\intercal \omega h_2$$
+	\item the line at infinity on the horizontal plane is orthogonal with respect to the vanishing point of the vertical direction:
+	\begin{equation}
+		[l'_{\infty}]_\times\; \omega\; vp_{vertical} = 0
+	\end{equation}
+	where $[l'_{\infty}]_\times$ is the vector product matrix of $l'_{\infty}$.
+	\item the orthogonality of vanishing points belonging to orthogonal directions (such as the ones computed in section \ref{affine_reconstruction}):
+	$$vp_1\; \omega\; vp_2 = 0$$
+\end{itemize}
+\begin{figure*}[!h]
+	\centering
+	\includegraphics[width=0.30\linewidth]{image_original_vertical_vp.png}
+	\captionof{figure}{Lines to compute the vertical vanishing point}
+	\label{image_original_vertical_vp}
+\end{figure*}
+Once we obtained the image of the absolute conic $\omega$, we computed the calibration matrix $K$ exploiting relation (\ref{eqn:omega}):
+\begin{equation}
+	K =
+	\begin{bmatrix}
+		1273.58016001317 & 0 & 540.535823296631 \\
+		0 & 975.253444381331 & 875.511631430140 \\
+		0 & 0 & 1
+	\end{bmatrix}
+\end{equation}
+where
+$$f_x = 1273.58016001317$$
+$$f_y = 975.253444381331$$
+$$u_0 = 540.535823296631$$
+$$v_0 = 875.511631430140$$
+
+
+\section{Reconstruction of a vertical facade}
+\textbf{Use the knowledge of K to rectify also a vertical facade, as, e.g., facade 3.} \hfill \break
+Knowing the calibration matrix $K$ we computed the image of the absolute conic as:
+$$\omega = (KK^t)^{-1}$$
+Referring to Fig. \ref{image_two_original_vertical_vp}, we computed the first vertical (along the vertical direction) vanishing point vp3 as the intersection between lines $he$ and $gf$ (images of parallel lines in the real scene) and the second vertical vanishing point vp4 as the intersection between lines $hg$ and $ef$ (images of parallel lines in the real scene).
+
+Since the absolute conic contains all the circular points, i.e. the circular points $\textit{I}_\pi$, $\textit{J}_\pi$ of any plane belong to absolute conic, the image $\omega$ of the absolute conic contains the image $\textit{I}'_\pi$, $\textit{J}'_\pi$ of all the circular points $\textit{I}_\pi$, $\textit{J}_\pi$. Thus, we computed the image of the circular points of the vertical plane (facade 3) as the intersection between the image of the absolute conic $\omega$ and the image of the line at the infinity to which vertical vanishing points vp3 and vp4 belong. Afterwards, we computed the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ as:
+\begin{equation}
+	C^{*'}_\infty = \textbf{I}' \textbf{J}^{'\intercal} + \textbf{J}' \textbf{I}^{'\intercal}
+\end{equation}
+Once we found the image of the dual conic $C^{*'}_\infty$, using the single value decomposition (SVD) method, we computed:
+$$SVD(C^{*'}_\infty) = U D V^\intercal = H_{rect}^{-1} C^*_\infty H_{rect}^{-1\intercal}$$
+As what we did in section \ref{shape_reconstruction}, we exploited the fact that:
+\begin{equation}
+	D =
+	\begin{bmatrix}
+		\sqrt{D_{11}} & 0 & 0 \\ 0 & \sqrt{D_{22}} & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	\begin{bmatrix}
+		1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	\begin{bmatrix}
+		\sqrt{D_{11}} & 0 & 0 \\ 0 & \sqrt{D_{22}} & 0 \\ 0 & 0 & 0
+	\end{bmatrix}
+	= D_S C^*_\infty D_S
+\end{equation}
+obtaining:
+\begin{equation}
+	U D V^\intercal = U D_S C^*_\infty D_S V^\intercal
+\end{equation}
+Eventually, we computed the rectification homography as:
+\begin{equation}
+	H_{rect} = (U D_S)^{-1}
+\end{equation}
+The result of the reconstruction of vertical facade 3 are shown in Fig. \ref{image_rectification_vertical_facade}, where we also represented the green points highlighted in the original image in Fig. \ref{image_two_original_vertical_vp}.
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.45\textwidth}
+		\centering
+		\includegraphics[scale = 0.4]{image_two_original_vertical_vp.png}
+		\captionof{figure}{Lines used to compute the two vertical vanishing points}
+		\label{image_two_original_vertical_vp}
+	\end{minipage}%
+	\quad
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[scale = 0.4]{image_rectification_vertical_facade.png}
+		\captionof{figure}{Reconstruction of the vertical facade}
+		\label{image_rectification_vertical_facade}
+	\end{minipage}
+\end{figure}
+\pagebreak
+
+\section{Localization}
+\textbf{Determine the relative pose (i.e. position and orientation) between facade 3 and the camera reference. Use information about the camera height to solve for scale.} \hfill \break
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
