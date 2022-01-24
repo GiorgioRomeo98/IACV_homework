@@ -1,7 +1,12 @@
-function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, debug)
-    % CAMERA_LOCALIZATION Summary of this function goes here
-    % Detailed explanation goes here
-
+function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug)
+    % CAMERA_LOCALIZATION locates the camera with respect facade 3
+    
+    % input
+    % points: main points highlighted in the original image
+    % ratio_f2_f3: ratio between facade 2 width and facade 3 width
+    % atio_f3_height_f3_width: ration between facade 3 height and width
+    % debug: true to print all the images
+    
 
     % we first extract the rotation of the (vertical ??????) plane with respect
     % the camera frame, then we compute the rotation and translation of the
@@ -10,11 +15,11 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
 
 
     %% fit the homography to restore real measure (possible since we know the aspect ratio)
-    % build up the rectangle of the vertical facade (face??????) using its real measure
+    % build up the rectangle of the vertical facade using its real measure
     lower_left_point = [0 0];
     upper_left_point = [0 LENGTH_LONGSIDE];
-    lower_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_length 0];
-    upper_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_length LENGTH_LONGSIDE];
+    lower_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_width 0];
+    upper_right_point = [LENGTH_LONGSIDE/ratio_f3_height_f3_width LENGTH_LONGSIDE];
 
     points.upper_left_corner = [272; 535; 1];
     points.upper_right_corner = [732; 552; 1];
@@ -22,16 +27,16 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     points.lower_left_corner = [202; 1312; 1];
 
     % fit the homography from scene to image 
-    H_omography = fitgeotrans([upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
+    H_homography = fitgeotrans([upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
                               [points.upper_left_corner(1:2).'; points.lower_left_corner(1:2).'; points.lower_right_corner(1:2).'; points.upper_right_corner(1:2).'], ...
                               'projective');
 
-    H_omography = H_omography.T.';
+    H_homography = H_homography.T.';
 
     % extract columns
-    h1 = H_omography(:,1);
-    h2 = H_omography(:,2);
-    h3 = H_omography(:,3);
+    h1 = H_homography(:,1);
+    h2 = H_homography(:,2);
+    h3 = H_homography(:,3);
     
     % normalization factor
     lambda = 1 / norm(K \ h1);
@@ -42,7 +47,7 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     r3 = cross(r1,r2);
     
     %% compute rotation of the world with respect to the camera (R cam -> world)
-    % in this case the world is the vertical facade (face ?????)
+    % in this case the world is the vertical facade
     R = [r1, r2, r3];
 
     % due to noise in the data R may be not a true rotation matrix.
@@ -58,35 +63,52 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     % since T is expressed in the camera reference frame we want it in the plane
     % reference frame, R.' is the rotation of the camera with respect to the plane
     cameraPosition = -R.'*T;
-    cameraPosition = cameraPosition ./ cameraPosition(2);
-    cameraPosition = cameraPosition .* 150;
 
-    %display(cameraPosition)
+    scaling = 1.50 / cameraPosition(2);
+    cameraPosition = cameraPosition .* scaling;
+
+    display(cameraPosition)
 
 
     %% Display orientation and position from vertical facace (face ?????)
-    if debug
+%     if debug
         figure('Name', 'Camera location')
-        plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
+        plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 0.5);
         hold on;
+        facade_2_width = ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_width * scaling;
+        facade_3_width = LENGTH_LONGSIDE/ratio_f3_height_f3_width * scaling;
+        upper_left_point = upper_left_point * scaling;
+        lower_left_point = lower_left_point * scaling;
+        lower_right_point = lower_right_point * scaling;
+        upper_right_point = upper_right_point * scaling;
 
         pcshow([[upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
                 zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1)], ...
                 'red','VerticalAxisDir', 'up', 'MarkerSize', 20);
-    
-        patch([upper_left_point(1); lower_left_point(1); lower_right_point(1); upper_right_point(1)], ...
-              [upper_left_point(2); lower_left_point(2); lower_right_point(2); upper_right_point(2)], ...
-              'green');
-    
-        patch([upper_left_point(1); lower_left_point(1); lower_left_point(1); upper_left_point(1)], ...
-              [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
-              [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0], ...
-              'red');
-    
-        patch([upper_right_point(1); lower_right_point(1); lower_right_point(1); upper_right_point(1)], ...
-              [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
-              [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0], ...
-              'red');
+        
+%         patch([upper_left_point(1); lower_left_point(1); lower_right_point(1); upper_right_point(1)], ...
+%               [upper_left_point(2); lower_left_point(2); lower_right_point(2); upper_right_point(2)], ...
+%               'green');
+%     
+%         patch([upper_left_point(1); lower_left_point(1); lower_left_point(1); upper_left_point(1)], ...
+%               [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
+%               [facade_2_width, facade_2_width, 0, 0], ...
+%               'red');
+% 
+%         patch([upper_left_point(1); lower_left_point(1); lower_left_point(1)-facade_3_width; upper_left_point(1)-facade_3_width], ...
+%               [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
+%               [facade_2_width, facade_2_width, facade_2_width, facade_2_width], ...
+%               'green');
+%     
+%         patch([upper_right_point(1); lower_right_point(1); lower_right_point(1); upper_right_point(1)], ...
+%               [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
+%               [facade_2_width, facade_2_width, 0, 0], ...
+%               'red');
+% 
+%         patch([upper_right_point(1); lower_right_point(1); lower_right_point(1)+facade_3_width; upper_right_point(1)+facade_3_width], ...
+%               [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
+%               [facade_2_width, facade_2_width, facade_2_width, facade_2_width], ...
+%               'green');        
 
         xlabel('X')
         ylabel('Y')
@@ -94,31 +116,42 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_length, 
     
         saveas(gcf, 'images/camera_location.png')
 
-    end
+%     end
 
 
 %         figure('Name', 'Camera location')
 %         plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
 %         hold on;
 % 
-%         pcshow([[upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
-%                 zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1)], ...
-%                 'red','VerticalAxisDir', 'up', 'MarkerSize', 20);
-%     
-%         patch([upper_left_point(1); lower_left_point(1); lower_right_point(1); upper_right_point(1)], ...
-%               zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1),...
-%               [upper_left_point(2); lower_left_point(2); lower_right_point(2); upper_right_point(2)], ...
-%               'green');
-%     
-%         patch([upper_left_point(1); lower_left_point(1); lower_left_point(1); upper_left_point(1)], ...
-%               [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0],...
-%               [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
-%               'red');
-%     
-%         patch([upper_right_point(1); lower_right_point(1); lower_right_point(1); upper_right_point(1)], ...
-%               [ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, ratio_f2_f3*LENGTH_LONGSIDE/ratio_f3_height_f3_length, 0, 0],...
-%               [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
-%               'red');
+        pcshow([[upper_left_point; lower_left_point; lower_right_point; upper_right_point], ...
+                zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1)], ...
+                'red','VerticalAxisDir', 'up', 'MarkerSize', 20);
+    
+        patch([upper_left_point(1); lower_left_point(1); lower_right_point(1); upper_right_point(1)], ...
+              zeros(size([upper_left_point; lower_left_point; lower_right_point; upper_right_point],1), 1),...
+              [upper_left_point(2); lower_left_point(2); lower_right_point(2); upper_right_point(2)], ...
+              'green');
+    
+        patch([upper_left_point(1); lower_left_point(1); lower_left_point(1); upper_left_point(1)], ...
+              [facade_2_width, facade_2_width, 0, 0],...
+              [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
+              'red');
+
+        patch([upper_right_point(1); lower_right_point(1); lower_right_point(1)+facade_3_width; upper_right_point(1)+facade_3_width], ...
+              [facade_2_width, facade_2_width, facade_2_width, facade_2_width], ...
+              [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
+              'green');         
+    
+        patch([upper_right_point(1); lower_right_point(1); lower_right_point(1); upper_right_point(1)], ...
+              [facade_2_width, facade_2_width, 0, 0],...
+              [upper_right_point(2); lower_right_point(2); lower_right_point(2); upper_right_point(2)], ...
+              'red');
+
+        patch([upper_left_point(1); lower_left_point(1); lower_left_point(1)-facade_3_width; upper_left_point(1)-facade_3_width], ...
+              [facade_2_width, facade_2_width, facade_2_width, facade_2_width], ...
+              [upper_left_point(2); lower_left_point(2); lower_left_point(2); upper_left_point(2)], ...
+              'green');
+
 % 
 %         xlabel('X')
 %         ylabel('Y')

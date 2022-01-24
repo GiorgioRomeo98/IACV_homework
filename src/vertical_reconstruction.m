@@ -1,4 +1,4 @@
-function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_reconstruction(img, K, points, debug)
+function  [img_vertical_rectification, ratio_f3_height_f3_width] = vertical_reconstruction(img, K, points, debug)
     % VERTICAL_RECONSTRUCTION performs the rectification of a vertical facade
     %
     % output
@@ -103,10 +103,10 @@ function  [img_vertical_rectification, ratio_f3_height_f3_length] = vertical_rec
 
 
     %% compute the ratio between facade 3 height and facade 3 length
-    facade_3_length = norm(lower_right_corner_rect-lower_left_corner_rect, 2);
+    facade_3_width = norm(lower_right_corner_rect-lower_left_corner_rect, 2);
     facade_3_height = norm(upper_right_corner_rect-lower_right_corner_rect, 2);
 
-    ratio_f3_height_f3_length = facade_3_height / facade_3_length;
+    ratio_f3_height_f3_width = facade_3_height / facade_3_width;
 
 
     %% plot the result
