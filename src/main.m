@@ -53,7 +53,7 @@ end
 
 
 %% G4. Localization
-camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug)
+[cameraPosition, cameraRotation] = camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug);
 
 
 

@@ -1,4 +1,4 @@
-function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug)
+function [cameraPosition, cameraRotation] = camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug)
     % CAMERA_LOCALIZATION locates the camera with respect facade 3
     
     % input
@@ -66,9 +66,11 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, d
 
     scaling = 1.50 / cameraPosition(3);
     cameraPosition = cameraPosition .* scaling;
-
-    display(cameraPosition)
-
+    
+    if debug
+        display(cameraPosition)
+        display(cameraRotation)
+    end
 
     %% Display orientation and position of camera from vertical facade 3
     if debug
@@ -115,8 +117,6 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, d
         xlabel('X')
         ylabel('Y')
         zlabel('Z')
-    
-        saveas(gcf, 'images/camera_location.png')
 
     end
 

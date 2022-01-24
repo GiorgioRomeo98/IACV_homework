@@ -2,7 +2,6 @@
 
 \usepackage{geometry}            
 \geometry{letterpaper}
-\usepackage{graphicx}
 \usepackage{caption}
 \usepackage{authblk}
 \usepackage{amssymb}
@@ -11,10 +10,8 @@
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage{verbatim}
-\usepackage{subfig}
 \usetikzlibrary{positioning}
 \usepackage{hyperref}
-\usepackage{authblk}
 \usepackage{float}
 \newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
 
@@ -604,17 +601,75 @@ Due to noise in the data R may be not a true rotation matrix, thus, we approxima
 \begin{equation}
 	SVD(R) = [U,\; \sim\;,\;V] \Rightarrow \hat{R} = UV
 \end{equation}
-The results of the localization are shown in Fig. \ref{left_loc}.
-
-
-
-
-
-
-
-
-
-
+The computed camera position and camera rotation are:
+\begin{subequations}
+	\begin{align*}
+	cameraPosition &=
+	\begin{bmatrix}
+		17.96874075 \\ 2.41349869 \\ 1.5
+	\end{bmatrix}
+	\\
+	cameraRotaion &= 
+	\begin{bmatrix}
+		0.10673388 & -0.32533008 & -0.93955745 \\
+		0.99411473 & 0.01729609 & 0.10694268 \\
+		-0.01854100 & -0.94544232 & 0.32526151
+	\end{bmatrix}
+	\end{align*}
+\end{subequations} 
+The results of the localization are shown in the following figures:
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[scale = 0.65]{camera_localization_1.png}
+		\captionof{figure}{Camera location (1)}
+		\label{camera_localization_1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[scale = 0.73]{camera_localization_2.png}
+		\captionof{figure}{Camera location (2)}
+		\label{camera_localization_2}
+	\end{minipage}
+\end{figure}
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.48\textwidth}
+		\centering
+		\includegraphics[scale = 0.8]{camera_localization_YZ.png}
+		\captionof{figure}{Camera location along plane YZ}
+		\label{camera_localization_YZ}
+	\end{minipage}%
+	\begin{minipage}{.55\textwidth}
+		\centering
+		\includegraphics[scale = 0.81]{camera_localization_XZ.png}
+		\captionof{figure}{Camera location along plane XZ}
+		\label{camera_localization_XZ}
+	\end{minipage}
+\end{figure}
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.45\textwidth}
+		\centering
+		\includegraphics[scale = 0.46]{camera_localization_XY_1.png}
+		\captionof{figure}{Camera location along plane XY (1)}
+		\label{camera_localization_XY_1}
+	\end{minipage}%
+	\quad
+	\begin{minipage}{.45\textwidth}
+		\centering
+		\includegraphics[scale = 0.65]{camera_localization_XY_2.png}
+		\captionof{figure}{Camera location along plane XY (2)}
+		\label{camera_localization_XY_2}
+	\end{minipage}
+\end{figure}
+\section{References}
+\begin{itemize}
+	\item A Flexible new Technique for Camera Calibration (Zhang)
+	\item Multiple View Geometry in Computer Vision (Hartley, Zisserman)
+	\item Image Analysis and Computer Vision course slides Politecmico di Milano a.y. 2021/2022 
+\end{itemize}
 
 
 \end{document}
