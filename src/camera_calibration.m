@@ -85,7 +85,7 @@ function [K, points] = camera_calibration(img, points, H, debug)
 
         plot([points.vertical_vp_1(1), points.vertical_vp_2(1)], [points.vertical_vp_1(2), points.vertical_vp_2(2)], 'r--')
 
-        saveas(gcf, "images/image_two_original_vertical_vp.png");
+        saveas(gcf, "images/image_original_two_vertical_vp.png");
 
     end
 
