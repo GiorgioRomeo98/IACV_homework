@@ -9,7 +9,7 @@ addpath(genpath([pwd, filesep, 'images']));
 
 
 %% set variables
-debug = false;
+debug = true;
 
 %% load the image
 img = imread('images/Villa.png');
@@ -39,6 +39,9 @@ img_corners = corner_detection(img, debug);
 % img -> affine -> euclidean -> rotation
 % H_r is the transformation from the original image to the shape reconstruction.
 H_r = H_shape * H_affine;
+if debug
+    display(H_r);
+end
 
 
 %% G2. Calibration

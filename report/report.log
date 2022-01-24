@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  24 JAN 2022 00:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  24 JAN 2022 18:49
 entering extended mode
 **./report.tex
 (report.tex
@@ -1048,84 +1048,86 @@ Underfull \hbox (badness 10000) in paragraph at lines 157--158
 File: ../src/images//image_original_lines.png Graphic file (type png)
 <use ../src/images//image_original_lines.png>
 Package pdftex.def Info: ../src/images//image_original_lines.png  used on input
- line 194.
+ line 198.
 (pdftex.def)             Requested size: 151.60063pt x 200.50407pt.
 <../src/images//image_affine_reconstruction.png, id=134, 800.2698pt x 530.4618p
 t>
 File: ../src/images//image_affine_reconstruction.png Graphic file (type png)
 <use ../src/images//image_affine_reconstruction.png>
 Package pdftex.def Info: ../src/images//image_affine_reconstruction.png  used o
-n input line 201.
+n input line 205.
 (pdftex.def)             Requested size: 280.09863pt x 185.6644pt.
 
-Overfull \hbox (43.59479pt too wide) in paragraph at lines 201--202
+Overfull \hbox (43.59479pt too wide) in paragraph at lines 205--206
  [][] 
  []
 
 [8 <../src/images//image_original_lines.png (PNG copy)> <../src/images//image_a
 ffine_reconstruction.png (PNG copy)>] [9] [10]
-<./images/scene_triangles.png, id=170, 242.9075pt x 174.6525pt>
+<./images/scene_triangles.png, id=171, 242.9075pt x 174.6525pt>
 File: ./images/scene_triangles.png Graphic file (type png)
 <use ./images/scene_triangles.png>
-Package pdftex.def Info: ./images/scene_triangles.png  used on input line 368.
+Package pdftex.def Info: ./images/scene_triangles.png  used on input line 392.
 (pdftex.def)             Requested size: 182.18016pt x 130.98904pt.
 File: ../src/images//image_affine_reconstruction.png Graphic file (type png)
 <use ../src/images//image_affine_reconstruction.png>
 Package pdftex.def Info: ../src/images//image_affine_reconstruction.png  used o
-n input line 375.
+n input line 399.
 (pdftex.def)             Requested size: 220.06877pt x 145.8734pt.
 
-Overfull \hbox (5.06647pt too wide) in paragraph at lines 375--376
+Overfull \hbox (5.06647pt too wide) in paragraph at lines 399--400
  [][] 
  []
 
 [11 <./images/scene_triangles.png>] [12]
-<../src/images//image_original_vertical_vp.png, id=192, 433.1382pt x 572.8602pt
+<../src/images//image_original_vertical_vp.png, id=194, 433.1382pt x 572.8602pt
 >
 File: ../src/images//image_original_vertical_vp.png Graphic file (type png)
 <use ../src/images//image_original_vertical_vp.png>
 Package pdftex.def Info: ../src/images//image_original_vertical_vp.png  used on
- input line 442.
+ input line 470.
 (pdftex.def)             Requested size: 129.00269pt x 170.61813pt.
  [13 <../src/images//image_original_vertical_vp.png (PNG copy)>]
-<../src/images//image_two_original_vertical_vp.png, id=205, 433.1382pt x 572.86
+<../src/images//image_two_original_vertical_vp.png, id=211, 433.1382pt x 572.86
 02pt>
 File: ../src/images//image_two_original_vertical_vp.png Graphic file (type png)
 
 <use ../src/images//image_two_original_vertical_vp.png>
 Package pdftex.def Info: ../src/images//image_two_original_vertical_vp.png  use
-d on input line 502.
+d on input line 534.
 (pdftex.def)             Requested size: 173.25221pt x 229.14001pt.
-<../src/images//image_rectification_vertical_facade.png, id=206, 367.6134pt x 5
+<../src/images//image_rectification_vertical_facade.png, id=212, 367.6134pt x 5
 70.4512pt>
 File: ../src/images//image_rectification_vertical_facade.png Graphic file (type
  png)
 <use ../src/images//image_rectification_vertical_facade.png>
 Package pdftex.def Info: ../src/images//image_rectification_vertical_facade.png
-  used on input line 509.
+  used on input line 541.
 (pdftex.def)             Requested size: 147.04274pt x 228.17644pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 517--518
+[14] [15 <../src/images//image_two_original_vertical_vp.png (PNG copy)> <../src
+/images//image_rectification_vertical_facade.png (PNG copy)>]
 
- []
+LaTeX Warning: Reference `left_loc' on page 16 undefined on input line 607.
 
-[15 <../src/images//image_two_original_vertical_vp.png (PNG copy)> <../src/imag
-es//image_rectification_vertical_facade.png (PNG copy)>] (report.aux)
+[16] (report.aux)
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: BF14E785E98C2BCA2B5DDB2727078AF0;1786.
  ) 
 Here is how much of TeX's memory you used:
- 24717 strings out of 479321
- 459786 string characters out of 2856107
- 773517 words of memory out of 3000000
- 41664 multiletter control sequences out of 15000+600000
+ 24738 strings out of 479321
+ 460035 string characters out of 2856107
+ 774640 words of memory out of 3000000
+ 41668 multiletter control sequences out of 15000+600000
  411904 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,9n,102p,1007b,786s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 101i,9n,102p,1011b,786s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\Utente\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcr
 m1095.pk><C:/Users/Utente/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb><C:/Users/Utente/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -1143,9 +1145,9 @@ pe1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Utente/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Utente/AppData/Local/Progra
 ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Utente/AppData/Lo
 cal/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on report.pdf (15 pages, 9980817 bytes).
+Output written on report.pdf (16 pages, 9991122 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
- 63 named destinations out of 1000 (max. 500000)
+ 311 PDF objects out of 1000 (max. 8388607)
+ 80 named destinations out of 1000 (max. 500000)
  169 words of extra memory for PDF output out of 10000 (max. 10000000)
 

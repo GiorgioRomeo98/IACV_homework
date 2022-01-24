@@ -181,9 +181,13 @@ Taking into account that $H_{affine}$ should have the previous form and be non-s
 	\begin{bmatrix}
 		1 & 0 & 0 \\ 0 & 1 & 0 \\ & {l'}^{\intercal}_{\infty} &
 	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		1 & 0 & 0 \\ 0 & 1 & 0 \\ -0.00000795 & -0.00082198 & 1
+	\end{bmatrix}
 \end{equation}
 
-For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue points $a, b, c \, \text{and}\, d$. Afterwards, we computed the first vanishing point vp1 (not represented in the figure) as the intersection of the two lines $ab$ and $dc$ (images of parallel lines in the real scene), while the second vanishing point vp2 as the intersection of the two lines $ad$ and $bc$ (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated. Note that "line $ab$" should be properly defined as "line passing through point $a$ and $b$" (similar for all other lines).
+For the computation of the line at the infinity $l'_{\infty}$, we exploited the blue points highlighted in Fig. \ref{image_original_lines} (the green points were utilized in the shape reconstruction). First of all, we considered an horizontal plane parallel to the floor highlighting the blue points $a, b, c \, \text{and}\, d$. Afterwards, we computed the first vanishing point $vp1$ (not represented in the figure) as the intersection of the two lines $ab$ and $dc$ (images of parallel lines in the real scene), while the second vanishing point $vp2$ as the intersection of the two lines $ad$ and $bc$ (images of parallel lines in the real scene). Eventually, we computed $l'_{\infty}$ as the cross product of the two vanishing points (they belong to the image of the line at the infinity), obtaining the mapping $H_{affine}$ as previously stated. Note that "line $ab$" should be properly defined as "line passing through point $a$ and $b$" (similar for all other lines).
 
 The resulting affine reconstruction obtained applying $H_{affine}$ to the original image is shown in Fig. \ref{image_affine_reconstruction}. Note that the affine transformation $H_{affine}$ was also applied to the blue $(a, b, c, d)$ and green $(g)$ points to represent them in the affine reconstruction.
 
@@ -331,7 +335,9 @@ Eventually, we obtained the second constraint:
 	= 0
 \end{equation}
 Once we found the image of the dual conic $C^{*'}_\infty$, using the single value decomposition (SVD) method, we computed:
-$$SVD(C^{*'}_\infty) = U D V^\intercal = H_{shape}^{-1} C^*_\infty H_{shape}^{-1\intercal}$$
+\begin{equation}
+	SVD(C^{*'}_\infty) = U D V^\intercal = H_{shape}^{-1} C^*_\infty H_{shape}^{-1\intercal}
+\end{equation}
 However, since we did not obtain:
 \begin{equation}
 	D = C^*_\infty =
@@ -358,8 +364,26 @@ obtaining:
 	U D V^\intercal = U D_S C^*_\infty D_S V^\intercal
 \end{equation}
 Eventually, we computed:
-$$H_{shape} = (U D_S)^{-1}$$
+\begin{equation}
+	H_{shape} = (U D_S)^{-1} = 
+	\begin{bmatrix}
+		1.17870261 & -0.24436278 & 0 \\
+		-0.24436278 & 1.42341806 & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}
+\end{equation}
 The resulting shape reconstruction obtained applying $H_{shape}$ to the affine reconstruction is shown in Fig. \ref{image_shape_reconstruction}. Note that the shape transformation $H_{shape}$ was also applied to the blue $(a, b, c, d)$ and green $(g)$ points to represent them in the shape reconstruction.
+
+Eventually, we computed the overall mapping $H_r$ as:
+\begin{equation}
+	H_{r} = H_{shape} * H_{affine} =
+	\begin{bmatrix}
+		1.17870261 & -0.24436278 & 0 \\
+		-0.24436278 & 1.42341806 & 0 \\
+		-0.00000795 & -0.00082198 & 1
+	\end{bmatrix}
+\end{equation}
+
 
 \begin{figure}[!h]
 	\centering
@@ -428,14 +452,18 @@ The constraints were computed exploiting:
 		\quad \text{and} \quad (h_1 + ih_2)^\intercal \omega (h_1 + ih_2) = 0	
 	\end{equation}
 	leading to constraints:
-	$$h_1^\intercal \omega h_2 = 0 \quad \text{and} \quad h_1^\intercal \omega h_1 = h_2^\intercal \omega h_2$$
-	\item the line at infinity on the horizontal plane is orthogonal with respect to the vanishing point of the vertical direction:
 	\begin{equation}
+		h_1^\intercal \omega h_2 = 0 \quad \text{and} \quad h_1^\intercal \omega h_1 = h_2^\intercal \omega h_2
+	\end{equation}
+	\item the line at infinity on the horizontal plane is orthogonal with respect to the vanishing point of the vertical direction:
+	\begin{equation} \label{eqn:line_vp}
 		[l'_{\infty}]_\times\; \omega\; vp_{vertical} = 0
 	\end{equation}
 	where $[l'_{\infty}]_\times$ is the vector product matrix of $l'_{\infty}$.
 	\item the orthogonality of vanishing points belonging to orthogonal directions (such as the ones computed in section \ref{affine_reconstruction}):
-	$$vp_1\; \omega\; vp_2 = 0$$
+	\begin{equation}
+		vp_1\; \omega\; vp_2 = 0
+	\end{equation}
 \end{itemize}
 \begin{figure*}[!h]
 	\centering
@@ -462,15 +490,19 @@ $$v_0 = 875.511631430140$$
 \section{Reconstruction of a vertical facade}
 \textbf{Use the knowledge of K to rectify also a vertical facade, as, e.g., facade 3.} \hfill \break
 Knowing the calibration matrix $K$ we computed the image of the absolute conic as:
-$$\omega = (KK^t)^{-1}$$
-Referring to Fig. \ref{image_two_original_vertical_vp}, we computed the first vertical (along the vertical direction) vanishing point vp3 as the intersection between lines $he$ and $gf$ (images of parallel lines in the real scene) and the second vertical vanishing point vp4 as the intersection between lines $hg$ and $ef$ (images of parallel lines in the real scene).
+\begin{equation}
+	\omega = (KK^t)^{-1}
+\end{equation}
+Referring to Fig. \ref{image_two_original_vertical_vp}, we computed the first vertical (along the vertical direction) vanishing point $vp3$ ($vp_{vertical}$ in equation (\ref{eqn:line_vp})) as the intersection between lines $he$ and $gf$ (images of parallel lines in the real scene) and the second vertical vanishing point $vp4$ as the intersection between lines $hg$ and $ef$ (images of parallel lines in the real scene).
 
 Since the absolute conic contains all the circular points, i.e. the circular points $\textit{I}_\pi$, $\textit{J}_\pi$ of any plane belong to absolute conic, the image $\omega$ of the absolute conic contains the image $\textit{I}'_\pi$, $\textit{J}'_\pi$ of all the circular points $\textit{I}_\pi$, $\textit{J}_\pi$. Thus, we computed the image of the circular points of the vertical plane (facade 3) as the intersection between the image of the absolute conic $\omega$ and the image of the line at the infinity to which vertical vanishing points vp3 and vp4 belong. Afterwards, we computed the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ as:
 \begin{equation}
 	C^{*'}_\infty = \textbf{I}' \textbf{J}^{'\intercal} + \textbf{J}' \textbf{I}^{'\intercal}
 \end{equation}
 Once we found the image of the dual conic $C^{*'}_\infty$, using the single value decomposition (SVD) method, we computed:
-$$SVD(C^{*'}_\infty) = U D V^\intercal = H_{rect}^{-1} C^*_\infty H_{rect}^{-1\intercal}$$
+\begin{equation}
+	SVD(C^{*'}_\infty) = U D V^\intercal = H_{rect}^{-1} C^*_\infty H_{rect}^{-1\intercal}
+\end{equation}
 As what we did in section \ref{shape_reconstruction}, we exploited the fact that:
 \begin{equation}
 	D =
@@ -515,6 +547,64 @@ The result of the reconstruction of vertical facade 3 are shown in Fig. \ref{ima
 
 \section{Localization}
 \textbf{Determine the relative pose (i.e. position and orientation) between facade 3 and the camera reference. Use information about the camera height to solve for scale.} \hfill \break
+Finding the relative pose between facade 3 (highlighted through points $(e, f, g, h)$ in Fig. \ref{image_rectification_vertical_facade}) and the camera reference was possible knowing the size and shape of facade 3, the image and the calibration matrix $K$.
+
+Identifying the plane of the vertical facade 3 with $\pi$ and the position of a point in the plane reference frame with $X_{\pi}$, we can write the position of a point in the world reference frame as:
+\begin{equation}
+	 X_w =[R_{\pi} | o_{\pi}]X_{\pi} 
+\end{equation} 
+Referring to Fig. \ref{image_rectification_vertical_facade}, the plane reference frame has the y axis identical to the line at the bottom of facade 3, going right, the z axis with the same direction of the left line $he$ and the x axis orthogonal to both axis using the right hand rule. Thus, the origin of the plane reference frame is represented by point $h$.
+In this way a point on the plane can be written (in homogeneous coordinates) as:
+\begin{equation}
+	X_\pi = 
+	\begin{bmatrix}
+		0 \\ y \\ z \\ w
+	\end{bmatrix}
+\end{equation}
+Defining as $P$ the projection matrix:
+\begin{equation} \label{peq}
+	P=[KR | -KRo]
+\end{equation}
+mapping 3D points ($X$) of the world to points in the image ($x$). From:
+\begin{equation} \label{peq1}
+	x = P X
+\end{equation}
+we obtained:
+\begin{equation}
+	u = [KR | -KRo] [R_{\pi} | o_{\pi}]X_{\pi}
+\end{equation}
+By putting the world reference frame on the camera ($R=I$ and $o=[0 \ 0\ 0]^\intercal$):
+\begin{equation}
+	u = [K|\underline{\mathbf{0}}]
+	\begin{bmatrix}
+		j_\pi & k_\pi & o_\pi \\ 0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+		y \\ z \\ w
+	\end{bmatrix}
+	\Rightarrow
+	u = K [j_\pi | k_\pi | o_\pi] x
+\end{equation}
+Where x are the coordinates of the point on the plane. By inspection we identified $K [j_\pi | k_\pi | o_\pi] = H_{homography}$ the matrix that maps the real points to the image. $H$ was known since we knew shape and size of facade 3 (transformation mapping the shape of facade 3 face to the image).
+So we obtained:
+\begin{equation}
+	[j_\pi | k_\pi | o_\pi]= K^{-1}H_{homography} 
+\end{equation}
+Where $H_{homography} = [h_1\; |\; h_2\; |\; h_3]$ is the transformation mapping world points to image points. The matrix $R=[i_\pi\; | \; j_\pi \; | \; k_\pi]$ (rotation of the plane with respect to the camera) can be found using these equations:
+\begin{subequations}
+	\begin{align*}
+		\lambda &= \frac{1}{|K^{-1}h_1|} \\
+		j_\pi &= K^{-1}h_1\lambda \\
+		k_\pi &= K^{-1}h_2\lambda \\
+		i_\pi &= j_\pi \times k_\pi  \\
+		o_\pi &= K^{-1} h_3 \lambda
+	\end{align*}
+\end{subequations}
+Due to noise in the data R may be not a true rotation matrix, thus, we approximated it through SVD, obtaining an orthogonal matrix:
+\begin{equation}
+	SVD(R) = [U,\; \sim\;,\;V] \Rightarrow \hat{R} = UV
+\end{equation}
+The results of the localization are shown in Fig. \ref{left_loc}.
 
 
 

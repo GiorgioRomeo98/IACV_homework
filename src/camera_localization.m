@@ -41,14 +41,14 @@ function camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, d
     % normalization factor
     lambda = 1 / norm(K \ h1);
     
-    % r1 = K^-1 * h1 normalized
-    r1 = (K \ h1) * lambda;
-    r2 = (K \ h2) * lambda;
-    r3 = cross(r1,r2);
+    % r2 = K^-1 * h1 normalized
+    r2 = (K \ h1) * lambda; % r2 = j
+    r3 = (K \ h2) * lambda; % r3 = k
+    r1 = cross(r2,r3); % r1 = i
     
     %% compute rotation of the world with respect to the camera (R cam -> world)
     % in this case the world is the vertical facade
-    R = [r3, r1, r2];
+    R = [r1, r2, r3];
 
     % due to noise in the data R may be not a true rotation matrix.
     % approximate it through svd, obtaining a orthogonal matrix

@@ -128,7 +128,7 @@ function  [img_vertical_rectification, ratio_f3_height_f3_width] = vertical_reco
 
         saveas(gcf, 'images/image_rectification_vertical_facade.png');
 
-        fprintf('The ratio between facade 3 height and facade 3 length after rectification vertical facade is: %f/%f = %f\n', facade_3_height, facade_3_length, ratio_f3_height_f3_length);
+        fprintf('The ratio between facade 3 height and facade 3 length after rectification vertical facade is: %f/%f = %f\n', facade_3_height, facade_3_width, ratio_f3_height_f3_width);
 
     end
  

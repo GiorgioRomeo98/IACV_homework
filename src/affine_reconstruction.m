@@ -104,6 +104,8 @@ function [img_affine_reconstruction, H_affine, points, points_affine] = affine_r
     H_affine = [eye(2),zeros(2,1); im_line_infty(:).'];
     
     if debug
+        display(H_affine);
+
         % we can check that H^-T* imLinfty is the line at infinity in its canonical form:
         fprintf('The vanishing line is mapped to:\n');
         disp(inv(H_affine)'*im_line_infty);
