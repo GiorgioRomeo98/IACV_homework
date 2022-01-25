@@ -27,15 +27,15 @@ function [K, points] = camera_calibration(img, points, H, debug)
     upper_horizontal_line = cross(points.upper_left_corner,  points.upper_right_corner);
     lower_horizontal_line = cross(points.lower_left_corner,  points.lower_right_corner);
 
-    %compute vertical vanishing point
+    %compute vertical vanishing points
     vertical_vp_1 = cross(left_vertical_line, right_vertical_line);
     vertical_vp_2 = cross(upper_horizontal_line, lower_horizontal_line);
 
-    %normalize vanishing point
+    %normalize vanishing points
     vertical_vp_1 = vertical_vp_1/vertical_vp_1(3);
     vertical_vp_2 = vertical_vp_2/vertical_vp_2(3);
 
-    % assign the vertical vanishing point to the struct
+    % assign the vertical vanishing points to the struct
     points.vertical_vp_1 = vertical_vp_1;
     points.vertical_vp_2 = vertical_vp_2;
 

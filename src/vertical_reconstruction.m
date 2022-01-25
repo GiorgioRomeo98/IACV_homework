@@ -14,7 +14,7 @@ function  [img_vertical_rectification, ratio_f3_height_f3_width] = vertical_reco
 
 
     %% compute the image of the absolute conic through the calibration matrix K
-    IAC = inv(K * K');
+    IAC = inv(K * K.');
   
     IAC = IAC / norm(IAC);
 
@@ -37,7 +37,7 @@ function  [img_vertical_rectification, ratio_f3_height_f3_width] = vertical_reco
     c2 = vertical_im_line_infty(3);
 
 
-    %% build the system and find the intersection between image of the absolute conic and the line at the infinity
+    %% build the system and find the intersection between image of the absolute conic and line at the infinity
     syms 'x';
     syms 'y';
     

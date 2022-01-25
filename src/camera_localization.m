@@ -1,12 +1,16 @@
 function [cameraPosition, cameraRotation] = camera_localization(K, points, ratio_f2_f3, ratio_f3_height_f3_width, debug)
     % CAMERA_LOCALIZATION locates the camera with respect facade 3
-    
+    %
+    % output:
+    % cameraPosition: position of the camera w.r.t. facade 3
+    % cameraRotation: orientation of the camera w.r.t. facade 3
+    %
     % input
     % points: main points highlighted in the original image
     % ratio_f2_f3: ratio between facade 2 width and facade 3 width
     % atio_f3_height_f3_width: ration between facade 3 height and width
     % debug: true to print all the images
-    
+
 
     % we first extract the rotation of the vertical plane with respect
     % the camera frame, then we compute the rotation and translation of the
@@ -51,7 +55,7 @@ function [cameraPosition, cameraRotation] = camera_localization(K, points, ratio
     r1 = cross(r2,r3); % r1 = i
     
     %% compute rotation of the world with respect to the camera (R cam -> world)
-    % in this case the world is the vertical facade
+    % in this case the world is the vertical facade 3
     R = [r1, r2, r3];
 
     % due to noise in the data R may be not a true rotation matrix.

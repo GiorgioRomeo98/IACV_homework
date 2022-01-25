@@ -76,6 +76,7 @@ function [img_shape_reconstruction, H_shape, points_shape, ratio_f2_f3] = shape_
 
     tform = projective2d(H_shape);
     img_shape_reconstruction = imwarp(img_affine,tform);
+    % crop the image
     img_shape_reconstruction = imcrop(img_shape_reconstruction,[0, 380, 3140, 3000]);
 
 

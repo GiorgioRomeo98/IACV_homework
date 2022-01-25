@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  24 JAN 2022 23:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.4.5)  25 JAN 2022 16:30
 entering extended mode
 **./report.tex
 (report.tex
@@ -1072,12 +1072,12 @@ Package pdftex.def Info: ../src/images//image_original_vertical_vp.png  used on
  input line 467.
 (pdftex.def)             Requested size: 129.00269pt x 170.61813pt.
  [13 <../src/images//image_original_vertical_vp.png (PNG copy)>]
-<../src/images//image_two_original_vertical_vp.png, id=216, 433.1382pt x 572.86
+<../src/images//image_original_two_vertical_vp.png, id=216, 433.1382pt x 572.86
 02pt>
-File: ../src/images//image_two_original_vertical_vp.png Graphic file (type png)
+File: ../src/images//image_original_two_vertical_vp.png Graphic file (type png)
 
-<use ../src/images//image_two_original_vertical_vp.png>
-Package pdftex.def Info: ../src/images//image_two_original_vertical_vp.png  use
+<use ../src/images//image_original_two_vertical_vp.png>
+Package pdftex.def Info: ../src/images//image_original_two_vertical_vp.png  use
 d on input line 531.
 (pdftex.def)             Requested size: 173.25221pt x 229.14001pt.
 <../src/images//image_rectification_vertical_facade.png, id=217, 367.6134pt x 5
@@ -1092,7 +1092,7 @@ Package pdftex.def Info: ../src/images//image_rectification_vertical_facade.png
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[14] [15 <../src/images//image_two_original_vertical_vp.png (PNG copy)> <../src
+[14] [15 <../src/images//image_original_two_vertical_vp.png (PNG copy)> <../src
 /images//image_rectification_vertical_facade.png (PNG copy)>] [16]
 <../src/images//camera_localization_1.png, id=248, 312.56775pt x 255.354pt>
 File: ../src/images//camera_localization_1.png Graphic file (type png)
@@ -1158,9 +1158,9 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [17 <../src/images//camera_localization_1.png> <../src/images//camera_localizat
 ion_2.png> <../src/images//camera_localization_YZ.png> <../src/images//camera_l
 ocalization_XZ.png>]
-Overfull \hbox (9.99327pt too wide) in paragraph at lines 671--672
+Overfull \hbox (6.9516pt too wide) in paragraph at lines 671--672
 []\OT1/cmr/m/n/10.95 Image Anal-y-sis and Com-puter Vi-sion course slides Po-li
-tecmico di Mi-lano a.y. 2021/2022 
+tec-nico di Mi-lano a.y. 2021/2022 
  []
 
 [18 <../src/images//camera_localization_XY_1.png> <../src/images//camera_locali
@@ -1171,7 +1171,7 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 Here is how much of TeX's memory you used:
  24629 strings out of 479321
  459205 string characters out of 2856107
- 766351 words of memory out of 3000000
+ 767340 words of memory out of 3000000
  41550 multiletter control sequences out of 15000+600000
  411904 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1193,7 +1193,7 @@ pe1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Utente/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Utente/AppData/Local/Progra
 ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Utente/AppData/Lo
 cal/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on report.pdf (18 pages, 10045461 bytes).
+Output written on report.pdf (18 pages, 10045554 bytes).
 PDF statistics:
  340 PDF objects out of 1000 (max. 8388607)
  87 named destinations out of 1000 (max. 500000)

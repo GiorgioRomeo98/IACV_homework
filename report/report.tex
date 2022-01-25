@@ -43,7 +43,7 @@
 \section{Introduction}
 The homework is based on the back side of Villa Melzi d’Eril in Bellagio. In the bottom view below (Fig. \ref{scene}), all lines lie on a same horizontal plane $\Pi$. In addition the facades 1 and 5 are coplanar, and both are parallel to facade 3. Furthermore, facades 2 and 4 are perpendicular to facades 1, 3 and 5. The sun is placed at the point at the infinity
 $ S = [3.9\quad \text{-} 1\quad z\quad 0]^\intercal $
--where $z$ is irrelevant- with respect to to the reference frame reported in the picture. The layout of the architectonic elements on facade 3 is symmetric with respect to a central vertical axis. Windows of facades 1, 3 and 5 are are equally wide. Windows of facades 2 and 4 can not be exploited in reconstruction since they are poorly visible.
+-where $z$ is irrelevant- with respect to the reference frame reported in the picture. The layout of the architectonic elements on facade 3 is symmetric with respect to a central vertical axis. Windows of facades 1, 3 and 5 are are equally wide. Windows of facades 2 and 4 can not be exploited in reconstruction since they are poorly visible.
 
 An image of the back side of Villa Melzi d’Eril is taken by a digital camera (Fig. \ref{Villa}). The camera skew factor is assumed to be null; the aspect ratio is unknown (thus natural camera can not be assumed), as well as the principal point and the focal distance. The camera height (z-coordinate) over the ground plane is 1.5 m.\\
 
@@ -92,10 +92,10 @@ The processed image with extracted edges is shown in figure \ref{image_edges}.
 \end{figure*}
 
 \subsection{Line detection}
-The Hough transform is a technique that can be used to isolate features of a particular shape within an image. In our case, the Hough transform is used to detect straight lines. Since the Cartesian representation for lines does not include vertical lines, it is more convenient to utilize the parametric notation:
+The Hough transform is a technique that can be used to isolate features of a particular shape within an image. In our case, the Hough transform was used to detect straight lines. Since the Cartesian representation for lines does not include vertical lines, it is more convenient to utilize the parametric notation:
 $ rho = x*cos(\theta) + y*sin(\theta) $.
 
-Each datum (edge point extracted using Canny algorithm) votes for all models compatible with it. The steps followed are:
+Each datum (edge point extracted using Canny algorithm) votes for all models compatible with it. The followed steps are:
 \begin{itemize}
 	\item Discretization of the Hough Space into cells
 	\item For each cell, set a vote counter equals to 0
@@ -214,12 +214,12 @@ A similarity transformation is any transformation preserving: ratio of length, a
 		KK^\intercal  & 0 \\ 0^\intercal & 0
 	\end{bmatrix}
 \end{equation}
-where $K$ is a 2 x 2 invertible matrix. $S = KK^\intercal$ is a symmetric and homogeneous matrix, thus there are only 2 unknowns to identify $C^{*'}_\infty$. We found out the first unknown exploiting known angles: given two lines $l = [l_1\quad l_2 \quad l_3]^\intercal$ and $m = [m_1\quad m_2 \quad m_3]^\intercal$, the term $l_1 m_1 + l_2 m_2$ can be written as:
+where $K$ is a 2 x 2 invertible matrix. $S = KK^\intercal$ is a symmetric and homogeneous matrix, thus there are only 2 unknowns to identify $C^{*'}_\infty$. We found the first unknown exploiting known angles: given two lines $l = [l_1\quad l_2 \quad l_3]^\intercal$ and $m = [m_1\quad m_2 \quad m_3]^\intercal$, the term $l_1 m_1 + l_2 m_2$ can be written as:
 \begin{equation}
 	\begin{bmatrix}
 		l_1 & l_2 & l_3
 	\end{bmatrix}
-	=
+	*
 	\begin{bmatrix}
 		1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
 	\end{bmatrix} *
@@ -237,7 +237,7 @@ Furthermore, from the transformation rules we can derive: $l^\intercal C^{*}_\in
 	= 
 	\frac{l{'^\intercal} C^{*'}_\infty m'}{\sqrt{(l^{'\intercal} C^{*'}_\infty l')(m^{'\intercal} C^{*'}_\infty m')}}
 \end{equation}
-Referring to Fig. \ref{image_affine_reconstruction}, we selected the pair of lines ad and dc (images of orthogonal lines in the real scene) to exploit the fact that $\cos(\theta) = 0$ for orthogonal lines. Indeed, equation (\ref{eqn:angle}) can be simplified as follows:
+Referring to Fig. \ref{image_affine_reconstruction}, we selected the pair of lines ad and dc (images of orthogonal lines in the real scene) to exploit the fact that $\cos(\theta) = 0$ for orthogonal lines. Thus, equation (\ref{eqn:angle}) can be simplified as follows:
 \begin{equation}
 	\label{eqn:constraint_1}
 	\cos(\theta) = 0 =
@@ -250,7 +250,7 @@ More specifically, we wrote equation (\ref{eqn:constraint_1}) as:
 	\begin{bmatrix}
 		l_1 & l_2 & l_3
 	\end{bmatrix}
-	=
+	*
 	\begin{bmatrix}
 		a & b & 0 \\ b & c & 0 \\ 0 & 0 & 0
 	\end{bmatrix} *
@@ -271,7 +271,7 @@ Eventually, we obtained the first constraint:
 	= 0
 \end{equation}
 
-Note that we could not select another pair of orthogonal lines such as dc and cb for the second constraint because this would not have been independent from the previous constraints. For the last constraint, we exploited the invariance of ratio of length in similarity transformations.
+Note that we could not select another pair of orthogonal lines such as $dc$ and $cb$ for the second constraint because this one would not have been independent from the previous constraints. For the last constraint, we exploited the invariance of ratio of length in similarity transformations.
 
 First of all, as shown in Fig. \ref{scene_triangles}, exploiting the fact that the sun is a point at the infinite along the direction $[3.9\quad\text{-}1]$ ($z$ is irrelevant) and triangles 1 and 2 are similar (same angles), we computed the ratio $k$ between the lengths of segments $gd$ and $ad$: $k = 1/3.9$. Segment $ad$ represents the width of facade 2, while $gd$ represents the width of the shadow segment defined from point $d$ (junction of facade 2 and 3) and point $g$ (intersection of the vertical shadow $eg$ and the plane defined by the blue points $(a, b, c, d)$, as shown in Fig. \ref{image_original_lines}).
 The two segments were computed as:
@@ -400,7 +400,7 @@ Eventually, we computed the overall mapping $H_r$ as:
 \end{figure}
 
 \subsection{Ratio results}
-The final task of this point was to compute the ratio between the width of facade 3 and width of facade 3. Thus, referring to Fig. \ref{image_shape_reconstruction}, we measured the length of segment $ad$ (width facade 2) and length of segment $dg$ (width facade 3), obtaining:
+The final task of this point was to compute the ratio between the width of facade 3 and width of facade 3. Thus, referring to Fig. \ref{image_shape_reconstruction}, we measured the length of segment $ad$ (width facade 2) and length of segment $dc$ (width facade 3), obtaining:
 $$\frac{Facade\_2_{width}}{Facade\_3_{width}} = 0.659764$$
 Even if not required, we also computed the ratio between the width of facade 3 and width of the shadow segment $dg$, both after affine and shape reconstruction. We obtained the same result (invariance of the ratio of length):
 $$\frac{Facade\_3_{width}}{Shadow\_Segment_{width}} = 6.891124$$
@@ -492,7 +492,7 @@ Knowing the calibration matrix $K$ we computed the image of the absolute conic a
 \end{equation}
 Referring to Fig. \ref{image_two_original_vertical_vp}, we computed the first vertical (along the vertical direction) vanishing point $vp3$ ($vp_{vertical}$ in equation (\ref{eqn:line_vp})) as the intersection between lines $he$ and $gf$ (images of parallel lines in the real scene) and the second vertical vanishing point $vp4$ as the intersection between lines $hg$ and $ef$ (images of parallel lines in the real scene).
 
-Since the absolute conic contains all the circular points, i.e. the circular points $\textit{I}_\pi$, $\textit{J}_\pi$ of any plane belong to absolute conic, the image $\omega$ of the absolute conic contains the image $\textit{I}'_\pi$, $\textit{J}'_\pi$ of all the circular points $\textit{I}_\pi$, $\textit{J}_\pi$. Thus, we computed the image of the circular points of the vertical plane (facade 3) as the intersection between the image of the absolute conic $\omega$ and the image of the line at the infinity to which vertical vanishing points vp3 and vp4 belong. Afterwards, we computed the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ as:
+Since the absolute conic contains all the circular points, i.e. the circular points $\textit{I}_\pi$, $\textit{J}_\pi$ of any plane belong to the absolute conic, the image $\omega$ of the absolute conic contains the image $\textit{I}'_\pi$, $\textit{J}'_\pi$ of all the circular points $\textit{I}_\pi$, $\textit{J}_\pi$. Thus, we computed the image of the circular points of the vertical plane (facade 3) as the intersection between the image of the absolute conic $\omega$ and the image of the line at the infinity to which vertical vanishing points vp3 and vp4 belong. Afterwards, we computed the dual conic $C^{*'}_\infty$ image of the (original) conic dual to the circular points $(\textbf{I},\textbf{J})$ as:
 \begin{equation}
 	C^{*'}_\infty = \textbf{I}' \textbf{J}^{'\intercal} + \textbf{J}' \textbf{I}^{'\intercal}
 \end{equation}
@@ -528,7 +528,7 @@ The result of the reconstruction of vertical facade 3 are shown in Fig. \ref{ima
 	\centering
 	\begin{minipage}{.45\textwidth}
 		\centering
-		\includegraphics[scale = 0.4]{image_two_original_vertical_vp.png}
+		\includegraphics[scale = 0.4]{image_original_two_vertical_vp.png}
 		\captionof{figure}{Lines used to compute the two vertical vanishing points}
 		\label{image_two_original_vertical_vp}
 	\end{minipage}%
@@ -536,7 +536,7 @@ The result of the reconstruction of vertical facade 3 are shown in Fig. \ref{ima
 	\begin{minipage}{.5\textwidth}
 		\centering
 		\includegraphics[scale = 0.4]{image_rectification_vertical_facade.png}
-		\captionof{figure}{Reconstruction of the vertical facade}
+		\captionof{figure}{Reconstruction of facade 3}
 		\label{image_rectification_vertical_facade}
 	\end{minipage}
 \end{figure}
@@ -668,7 +668,7 @@ The results of the localization are shown in the following figures:
 \begin{itemize}
 	\item A Flexible new Technique for Camera Calibration (Zhang)
 	\item Multiple View Geometry in Computer Vision (Hartley, Zisserman)
-	\item Image Analysis and Computer Vision course slides Politecmico di Milano a.y. 2021/2022 
+	\item Image Analysis and Computer Vision course slides Politecnico di Milano a.y. 2021/2022 
 \end{itemize}
 
 
