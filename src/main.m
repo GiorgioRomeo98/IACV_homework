@@ -9,7 +9,7 @@ addpath(genpath([pwd, filesep, 'images']));
 
 
 %% set variables
-debug = true;
+debug = true;   % true to print all results and images
 
 %% load the image
 img = imread('images/Villa.png');

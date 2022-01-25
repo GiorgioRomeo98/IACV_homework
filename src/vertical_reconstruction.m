@@ -63,10 +63,15 @@ function  [img_vertical_rectification, ratio_f3_height_f3_width] = vertical_reco
     [U,D,~] = svd(imDCCP);  % ~ = U.'
     D(3,3) = 1;
     H_rect = inv(U*sqrt(D));
+    H_rect = H_rect.';
+
+    if debug
+        display(H_rect)
+    end
 
 
     %% apply the rectification to the image
-    tform = projective2d(H_rect');
+    tform = projective2d(H_rect);
     img_vertical_rectification = imwarp(img,tform);
     img_vertical_rectification = imrotate(img_vertical_rectification, 180);
 

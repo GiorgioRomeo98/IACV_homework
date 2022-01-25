@@ -33,6 +33,10 @@ function [cameraPosition, cameraRotation] = camera_localization(K, points, ratio
 
     H_homography = H_homography.T.';
 
+    if debug
+        display(H_homography);
+    end
+
     % extract columns
     h1 = H_homography(:,1);
     h2 = H_homography(:,2);

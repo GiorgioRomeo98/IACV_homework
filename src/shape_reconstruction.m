@@ -69,11 +69,12 @@ function [img_shape_reconstruction, H_shape, points_shape, ratio_f2_f3] = shape_
     H(2,2) = A(2,2);
 
     H_shape = inv(H);
+    H_shape = H_shape.';
     if debug
         display(H_shape);
     end
 
-    tform = projective2d(H_shape');
+    tform = projective2d(H_shape);
     img_shape_reconstruction = imwarp(img_affine,tform);
     img_shape_reconstruction = imcrop(img_shape_reconstruction,[0, 380, 3140, 3000]);
 
